@@ -12,7 +12,7 @@ class Player : public Sprite {
 	double fallingspeed = -10;
 
 	const double ACCELERATION = 0.5f;
-	const double JUMP_SPEED = 5.0f;
+	const double JUMP_SPEED = 7.0f;
 public:
 	Player(int x, int y) : Sprite(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false), x, y) {};
 
@@ -38,18 +38,6 @@ public:
 	bool isTouchingBlockVertically() {
 		bool isTouching = false;
 		bool divideByTwo = false;
-		/*for (int i = 0; i < getMainLayer()->size(); i++) {
-			if (getMainLayer()->at(i)->y == y+29 &&
-				((getMainLayer()->at(i)->x >= x && getMainLayer()->at(i)->x <= x+16) || (getMainLayer()->at(i)->x+16 >= x && getMainLayer()->at(i)->x <= x)) &&
-				getMainLayer()->at(i)->type != 't') {
-				if (getMainLayer()->at(i)->type == 'w') {
-					divideByTwo = true;
-					continue;
-				}
-				isTouching = true;
-				break;
-			}
-		}*/
 		Block* blockLeft = getBlockAt(x, y + 29);
 		Block* blockRight = getBlockAt(x + 16, y + 29);
 		if ((blockLeft != nullptr && blockLeft->type != 't') || (blockRight != nullptr && blockRight->type != 't')) {
@@ -71,6 +59,15 @@ public:
 		return isTouching && !divideByTwo;
 	}
 
+	bool canMove(bool right) {
+		bool canMove = true;
+		Block* block = getBlockAt(x + (right ? 17 : -1), y + 28);
+		if (block != nullptr && (block->type == 'b' || block->type == 's')) {
+			canMove = false;
+		}
+		return canMove;
+	}
+
 	Block* getBlockAt(int x, int y) {
 		Block* block = nullptr;
 		for (int i = 0; i < getMainLayer()->size(); i++) {
@@ -84,24 +81,48 @@ public:
 		return block;
 	}
 
+	void moveXWithCollision(int x) {
+		for (int i = 0; i < abs(x); i++) {
+			if (x > 0) {
+				if (canMove(true)) {
+					this->x++;
+				}
+				else {
+					break;
+				}
+			}
+			else {
+				if (canMove(false)) {
+					this->x--;
+				}
+				else {
+					break;
+				}
+			}
+		}
+	}
+
 	void tick() {
 		gravity();
 		//if (fallingspeed >= 0) fallingspeed = 0;
 
 		if (GetKeyState(VK_SPACE) & 0x8000) {
-			fallingspeed = -JUMP_SPEED;
+			if (isInLiquid)
+				fallingspeed = -JUMP_SPEED / 2;
+			else
+				fallingspeed = -JUMP_SPEED;
 		}
 		if (GetKeyState('A') & 0x8000 && x > 0) {
 			if (isInLiquid)
-				x += -1;
+				moveXWithCollision(-1);
 			else
-				x += -2;
+				moveXWithCollision(-2);
 		}
-		if (GetKeyState('D') & 0x8000) {
+		if (GetKeyState('D') & 0x8000 && canMove(true)) {
 			if (isInLiquid)
-				x += 1;
+				moveXWithCollision(1);
 			else
-				x += 2;
+				moveXWithCollision(2);
 		}
 	};
 };

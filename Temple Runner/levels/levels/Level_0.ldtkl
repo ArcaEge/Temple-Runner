@@ -559,51 +559,20 @@
 					"fieldInstances": []
 				},
 				{
-					"__identifier": "LightBlock",
-					"__grid": [16,11],
-					"__pivot": [0,0],
-					"__tags": [],
-					"__tile": { "tilesetUid": 3, "x": 64, "y": 0, "w": 16, "h": 16 },
-					"__smartColor": "#D77643",
-					"iid": "272e3900-ed50-11ed-a67b-b386b7c05392",
-					"width": 16,
-					"height": 16,
-					"defUid": 349,
-					"px": [256,176],
-					"fieldInstances": []
-				},
-				{
 					"__identifier": "Light",
-					"__grid": [16,11],
+					"__grid": [32,10],
 					"__pivot": [0.5,0.188],
 					"__tags": [],
 					"__tile": null,
-					"__smartColor": "#717BDF",
-					"iid": "925b65d0-ed50-11ed-a67b-99e016dfeb66",
-					"width": 16,
-					"height": 16,
-					"defUid": 347,
-					"px": [264,179],
-					"fieldInstances": [
-						{ "__identifier": "Radius", "__type": "Int", "__value": 160, "__tile": null, "defUid": 348, "realEditorValues": [{ "id": "V_Int", "params": [160] }] },
-						{ "__identifier": "Color", "__type": "Color", "__value": "#717BDF", "__tile": null, "defUid": 350, "realEditorValues": [{ "id": "V_Int", "params": [7437279] }] }
-					]
-				},
-				{
-					"__identifier": "Light",
-					"__grid": [25,5],
-					"__pivot": [0.5,0.188],
-					"__tags": [],
-					"__tile": null,
-					"__smartColor": "#FFFFFF",
+					"__smartColor": "#303030",
 					"iid": "3d22ff90-ed50-11ed-a67b-3b1c2dabcaee",
 					"width": 16,
 					"height": 16,
 					"defUid": 347,
-					"px": [408,83],
+					"px": [520,163],
 					"fieldInstances": [
-						{ "__identifier": "Radius", "__type": "Int", "__value": 96, "__tile": null, "defUid": 348, "realEditorValues": [] },
-						{ "__identifier": "Color", "__type": "Color", "__value": "#FFFFFF", "__tile": null, "defUid": 350, "realEditorValues": [] }
+						{ "__identifier": "Radius", "__type": "Int", "__value": 2000, "__tile": null, "defUid": 348, "realEditorValues": [{ "id": "V_Int", "params": [2000] }] },
+						{ "__identifier": "Color", "__type": "Color", "__value": "#303030", "__tile": null, "defUid": 350, "realEditorValues": [{ "id": "V_Int", "params": [3158064] }] }
 					]
 				}
 			]

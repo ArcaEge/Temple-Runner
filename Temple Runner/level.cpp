@@ -55,8 +55,8 @@ Level::Level(char* levelname, Graphics* graphics) {
 				if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Spike") {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
 					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
-
-					spikeLayer.push_back(new Spike(x, y));
+					RECT croprect = { 6*16, 8*16, 7*16, 9*16 };
+					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y, 's'));
 
 				} else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "PlayerStart") {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];

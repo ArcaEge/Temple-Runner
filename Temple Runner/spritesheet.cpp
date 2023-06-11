@@ -118,10 +118,10 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 				br = (((minBrightness) > ((((1.0f) < (br)) ? (1.0f) : (br)))) ? (minBrightness) : ((((1.0f) < (br)) ? (1.0f) : (br))));
 				// equivalent to max(minBrightness, min(1.0f, brightness))
 
-				float r = round(light->r / 255.0f * 32) / 32;
-				float g = round(light->g / 255.0f * 32) / 32;
-				float b = round(light->b / 255.0f * 32) / 32;
-				br = round(br * 32) / 32;
+				float r = light->r / 255.0f;
+				float g = light->g / 255.0f;
+				float b = light->b / 255.0f;
+				//br = round(br * 32) / 32;
 				
 				brightness_b *= (1 - b * ((float)(light->radius - d) / light->radius) / 2.5f);
 				brightness_g *= (1 - g * ((float)(light->radius - d) / light->radius) / 2.5f);
@@ -129,20 +129,21 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 				brightness += 1 - d/(float)light->radius;
 			}
 
+			brightness = round(brightness * 32) / 32;
 			brightness = (((minBrightness) > ((((1.0f) < (brightness)) ? (1.0f) : (brightness)))) ? (minBrightness) : ((((1.0f) < (brightness)) ? (1.0f) : (brightness))));
 
 			// Get the pixel offset within the pixel buffer
 			int offset = (y * width + x) * bytesPerPixel;
 
-			pPixels[offset + 0] = static_cast<BYTE>(pPixels[offset + 0] * minBrightness);  // Red component
+			pPixels[offset + 0] = static_cast<BYTE>(pPixels[offset + 0] * minBrightness);  // Blue component
 			pPixels[offset + 1] = static_cast<BYTE>(pPixels[offset + 1] * minBrightness);  // Green component
-			pPixels[offset + 2] = static_cast<BYTE>(pPixels[offset + 2] * minBrightness);  // Blue component
+			pPixels[offset + 2] = static_cast<BYTE>(pPixels[offset + 2] * minBrightness);  // Red component
 
 			if (lightsWithinRange.size() > 0) {
 				// Set the pixel values based on the calculated brightness
-				pPixels[offset + 0] = static_cast<BYTE>((255 - (255 - pPixels[offset + 0] * (brightness * 2.2f)) * brightness_b));  // Red component
-				pPixels[offset + 1] = static_cast<BYTE>((255 - (255 - pPixels[offset + 1] * (brightness * 2.2f)) * brightness_g));  // Green component
-				pPixels[offset + 2] = static_cast<BYTE>((255 - (255 - pPixels[offset + 2] * (brightness * 2.2f)) * brightness_r));  // Blue component
+				pPixels[offset + 0] = static_cast<BYTE>(min(round((255 - (255 - pPixels[offset + 0] * (brightness * 2.3f)) * brightness_b) * (255 * 32)) / (255 * 32), 255.0f));  // Blue component
+				pPixels[offset + 1] = static_cast<BYTE>(min(round((255 - (255 - pPixels[offset + 1] * (brightness * 2.3f)) * brightness_g) * (255 * 32)) / (255 * 32), 255.0f));  // Green component
+				pPixels[offset + 2] = static_cast<BYTE>(min(round((255 - (255 - pPixels[offset + 2] * (brightness * 2.3f)) * brightness_r) * (255 * 32)) / (255 * 32), 255.0f));  // Red component
 			}
 		}
 	}

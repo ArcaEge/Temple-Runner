@@ -58,9 +58,9 @@ public:
 					float alpha = round(static_cast<float>(1.0f - (distance / (radius / 0.55f))) * 32) / 128 - 0.11f;
 					float invAlpha = 1.0f / alpha;
 					// Set the pixel values based on the calculated brightness
-					pPixels[offset + 0] = static_cast<BYTE>(b);  // Red component
+					pPixels[offset + 0] = static_cast<BYTE>(b);  // Blue component
 					pPixels[offset + 1] = static_cast<BYTE>(g);  // Green component
-					pPixels[offset + 2] = static_cast<BYTE>(r);  // Blue component
+					pPixels[offset + 2] = static_cast<BYTE>(r);  // Red component
 
 					// Restore the color channels by multiplying with the alpha value
 					pPixels[offset + 0] = static_cast<BYTE>(pPixels[offset + 0] * alpha);
