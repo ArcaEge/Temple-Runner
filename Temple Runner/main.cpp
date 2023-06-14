@@ -1,13 +1,19 @@
 #include <windows.h>
 #include <chrono>
+#include <time.h>
 #include <WinUser.h>
+#include <xaudio2.h>
 
 #include "graphics.h"
 #include "level.h"
+#include "audiomanager.h"
 
 Graphics* graphics;
 Level* level;
 HWND windowhandle;
+IXAudio2* audioEngine;
+IXAudio2MasteringVoice* masterVoice;
+//AudioManager* audioManager;
 
 std::vector<Block*>* getMainLayer() {
 	return &(level->mainLayer);
@@ -15,6 +21,10 @@ std::vector<Block*>* getMainLayer() {
 
 std::vector<Light*>* getLightLayer() {
 	return &(level->lightLayer);
+}
+
+std::vector<Coin*>* getCoinLayer() {
+	return &(level->coinLayer);
 }
 
 using namespace std::chrono;
@@ -107,13 +117,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 
-	char levelname[] = "Level_0";
+	XAudio2Create(&audioEngine, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	audioEngine->CreateMasteringVoice(&masterVoice);
 
+	//audioManager = new AudioManager(audioEngine);
+
+	char levelname[] = "Level_0";
 	level = new Level(levelname, graphics);
 
 	ShowWindow(windowhandle, nCmdShow);
 
 	SpriteSheet::scale = calculateScale(rect.right, rect.bottom);
+
+	srand(time(NULL));
 
 	MSG msg;
 	msg.message = WM_NULL;

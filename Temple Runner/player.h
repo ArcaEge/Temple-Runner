@@ -6,15 +6,59 @@
 
 extern Graphics* global_gfx;
 extern std::vector<Block*>* getMainLayer();
+extern std::vector<Coin*>* getCoinLayer();
 
 class Player : public Sprite {
 	bool isInLiquid = false;
 	double fallingspeed = -10;
 
 	const double ACCELERATION = 0.5f;
-	const double JUMP_SPEED = 7.0f;
+	const double JUMP_SPEED = 6.0f;
+
+	int animationFrame = 0;
+	const int ANIMATION_FRAME_MAX = 5;
+	const int MAX_FRAME_TIMER = 8;
+	int frameTimer = MAX_FRAME_TIMER;
+
+	int animationActive = 0; // 0 = idle, 1 = run
+	bool imageFlipped = false;
+
+	SpriteSheet idle[6] = {
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 40,3,58,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 72,3,90,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 104,3,122,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 136,3,154,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false))
+	};
+	SpriteSheet idleFlipped[6] = {
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 8,3,26,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 40,3,58,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 72,3,90,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 104,3,122,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 136,3,154,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 8,3,26,32 }), true, false))
+	};
+
+	SpriteSheet walking[6]{
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 6,3,28,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 38,3,60,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 70,3,92,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 102,3,124,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 134,3,156,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 166,3,188,32 }), true, false))
+	};
+	SpriteSheet walkingFlipped[6]{
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 6,3,28,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 38,3,60,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 70,3,92,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 102,3,124,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 134,3,156,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 166,3,188,32 }), true, false))
+	};
+
 public:
-	Player(int x, int y) : Sprite(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false), x, y) {};
+	Player(int x, int y) : Sprite(&idle[0], x, y) {};
 
 	void gravity() {
 		if (!(isTouchingBlockVertically() && fallingspeed > 0)) {
@@ -31,16 +75,22 @@ public:
 			}
 		}
 		else {
-			move(0, fallingspeed);
+			for (int i = 0; i <= -fallingspeed; i++) {
+				if (isTouchingBlockTop()) {
+					fallingspeed = 0;
+					break;
+				}
+				move(0, -1);
+			}
 		}
 	}
 
 	bool isTouchingBlockVertically() {
 		bool isTouching = false;
 		bool divideByTwo = false;
-		Block* blockLeft = getBlockAt(x, y + 29);
-		Block* blockRight = getBlockAt(x + 16, y + 29);
-		if ((blockLeft != nullptr && blockLeft->type != 't') || (blockRight != nullptr && blockRight->type != 't')) {
+		Block* blockLeft = getBlockAt(x + 1, y + 29);
+		Block* blockRight = getBlockAt(x + 15, y + 29);
+		if ((blockLeft != nullptr && (blockLeft->type != 't')) || (blockRight != nullptr && (blockRight->type != 't'))) {
 
 			if (((blockLeft == nullptr || blockLeft->type == 'w') && blockRight != nullptr && blockRight->type == 'w') ||
 				((blockRight == nullptr || blockRight->type == 'w') && blockLeft != nullptr && blockLeft->type == 'w')) {
@@ -59,10 +109,20 @@ public:
 		return isTouching && !divideByTwo;
 	}
 
+	bool isTouchingBlockTop() {
+		bool isTouching = false;
+		Block* blockLeft = getBlockAt(x + 1, y, 'x');
+		Block* blockRight = getBlockAt(x + 15, y, 'x');
+		if (blockLeft != nullptr || blockRight != nullptr) {
+			isTouching = true;
+		}
+		return isTouching;
+	}
+
 	bool canMove(bool right) {
 		bool canMove = true;
-		Block* block = getBlockAt(x + (right ? 17 : -1), y + 28);
-		if (block != nullptr && (block->type == 'b' || block->type == 's')) {
+		Block* block = getBlockAt(x + (right ? 16 : 0), y + 28);
+		if (block != nullptr && (block->type == 'b' || block->type == 's' || block->type == 'x')) {
 			canMove = false;
 		}
 		return canMove;
@@ -79,6 +139,32 @@ public:
 			}
 		}
 		return block;
+	}
+
+	Block* getBlockAt(int x, int y, char type) {
+		Block* block = nullptr;
+		for (int i = 0; i < getMainLayer()->size(); i++) {
+			int blockX = getMainLayer()->at(i)->x;
+			int blockY = getMainLayer()->at(i)->y;
+			if (x >= blockX && x < blockX + 16 && y >= blockY && y < blockY + 16 && getMainLayer()->at(i)->type == type) {
+				block = getMainLayer()->at(i);
+				break;
+			}
+		}
+		return block;
+	}
+
+	Coin* getCoinAt(int x, int y) {
+		Coin* coin = nullptr;
+		for (int i = 0; i < getCoinLayer()->size(); i++) {
+			int coinX = getCoinLayer()->at(i)->x;
+			int coinY = getCoinLayer()->at(i)->y;
+			if (x >= coinX && x < coinX + 16 && y >= coinY && y < coinY + 16) {
+				coin = getCoinLayer()->at(i);
+				break;
+			}
+		}
+		return coin;
 	}
 
 	void moveXWithCollision(int x) {
@@ -102,9 +188,39 @@ public:
 		}
 	}
 
+	int destroyTouchingCoins() {
+		Coin* coinBottomLeft = getCoinAt(x + 3, y + 25);
+		Coin* coinBottomRight = getCoinAt(x + 13, y + 25);
+		Coin* coinTopLeft = getCoinAt(x + 3, y + 3);
+		Coin* coinTopRight = getCoinAt(x + 13, y + 3);
+
+		int destroyedCoins = 0;
+
+		if (coinBottomLeft != nullptr) {
+			coinBottomLeft->destroy();
+			destroyedCoins++;
+		}
+		if (coinBottomRight != nullptr) {
+			coinBottomRight->destroy();
+			destroyedCoins++;
+		}
+		if (coinTopLeft != nullptr) {
+			coinTopLeft->destroy();
+			destroyedCoins++;
+		}
+		if (coinTopRight != nullptr) {
+			coinTopRight->destroy();
+			destroyedCoins++;
+		}
+
+		return destroyedCoins;
+	}
+
 	void tick() {
 		gravity();
+		destroyTouchingCoins();
 		//if (fallingspeed >= 0) fallingspeed = 0;
+		animationActive = 0;
 
 		if (GetKeyState(VK_SPACE) & 0x8000) {
 			if (isInLiquid)
@@ -112,17 +228,44 @@ public:
 			else
 				fallingspeed = -JUMP_SPEED;
 		}
-		if (GetKeyState('A') & 0x8000 && x > 0) {
+		if (GetKeyState('A') & 0x8000 && !(GetKeyState('D') & 0x8000) && x > 0) {
+			animationActive = 1;
+			imageFlipped = true;
 			if (isInLiquid)
 				moveXWithCollision(-1);
 			else
 				moveXWithCollision(-2);
 		}
-		if (GetKeyState('D') & 0x8000 && canMove(true)) {
+		if (GetKeyState('D') & 0x8000 && !(GetKeyState('A') & 0x8000)) {
+			imageFlipped = false;
+			animationActive = 1;
 			if (isInLiquid)
 				moveXWithCollision(1);
 			else
 				moveXWithCollision(2);
 		}
-	};
+
+		frameTimer--;
+		if (frameTimer <= 0) {
+			frameTimer = MAX_FRAME_TIMER;
+			animationFrame++;
+			//sheet = &idle[animationFrame];
+			if (animationFrame > ANIMATION_FRAME_MAX) animationFrame = 0;
+		}
+	}
+
+	virtual void render() {
+		if (imageFlipped) {
+			if (animationActive == 0)
+				idleFlipped[animationFrame].Draw(x, y);
+			else if (animationActive == 1)
+				walkingFlipped[animationFrame].Draw(x - 2, y);
+		}
+		else {
+			if (animationActive == 0)
+				idle[animationFrame].Draw(x, y);
+			else if (animationActive == 1)
+				walking[animationFrame].Draw(x - 2, y);
+		}
+	}
 };

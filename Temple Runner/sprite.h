@@ -13,7 +13,7 @@ public:
 	Sprite(SpriteSheet* spsheet, int x, int y);
 	~Sprite();
 
-	void render();
+	virtual void render();
 	void move(int x, int y);
 	void moveTo(int x, int y);
 

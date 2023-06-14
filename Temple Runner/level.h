@@ -6,7 +6,7 @@
 #include "json.hpp"
 
 #include "block.h"
-#include "spike.h"
+#include "coin.h"
 #include "player.h"
 #include "light.h"
 
@@ -20,7 +20,7 @@ class Level {
 
 public:
 	std::vector<Block*> mainLayer;
-	std::vector<Spike*> spikeLayer;
+	std::vector<Coin*> coinLayer;
 	std::vector<Light*> lightLayer;
 	std::vector<Sprite*> backgroundLayers[3]; // More big number = more far away
 	std::vector<Sprite*> foregroundLayers[2]; // More big number = more close

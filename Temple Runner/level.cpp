@@ -71,7 +71,21 @@ Level::Level(char* levelname, Graphics* graphics) {
 					RECT croprect = { 64, 0, 80, 16 };
 					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y));
 
-				} else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Light") {
+				} else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Boundary") {
+					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
+					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
+
+					RECT croprect = { 128, 0, 144, 16 };
+					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y, 'x'));
+
+				} else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Coin") {
+					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
+					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
+
+					coinLayer.push_back(new Coin(x, y));
+
+				}
+				else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Light") {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
 					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
 					int radius = 64;
@@ -114,8 +128,8 @@ void Level::render() {
 		mainLayer[i]->render();
 	}
 
-	for (int i = 0; i < spikeLayer.size(); i++) {
-		spikeLayer[i]->render();
+	for (int i = 0; i < coinLayer.size(); i++) {
+		coinLayer[i]->render();
 	}
 
 	player->render();
@@ -137,8 +151,8 @@ void Level::tick() {
 		mainLayer[i]->tick();
 	}
 
-	for (int i = 0; i < spikeLayer.size(); i++) {
-		spikeLayer[i]->tick();
+	for (int i = 0; i < coinLayer.size(); i++) {
+		coinLayer[i]->tick();
 	}
 
 	player->tick();

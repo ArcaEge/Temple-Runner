@@ -145,6 +145,7 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 				pPixels[offset + 1] = static_cast<BYTE>(min(round((255 - (255 - pPixels[offset + 1] * (brightness * 2.3f)) * brightness_g) * (255 * 32)) / (255 * 32), 255.0f));  // Green component
 				pPixels[offset + 2] = static_cast<BYTE>(min(round((255 - (255 - pPixels[offset + 2] * (brightness * 2.3f)) * brightness_r) * (255 * 32)) / (255 * 32), 255.0f));  // Red component
 			}
+			pPixels[offset + 3] = static_cast<BYTE>(pPixels[offset + 3] * opacity);  // Alpha component
 		}
 	}
 
@@ -159,11 +160,16 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 	wicConverter->Release();
 }
 
+void SpriteSheet::setOpacity(float opacity) {
+	opacity = min(max(opacity, 0.0f), 1.0f);
+	this->opacity = opacity;
+	shaded = false;
+}
 
 void SpriteSheet::Draw(double x, double y) {
 	if ((liveRenderShader || !shaded) && !keepUnShaded) {
-		reShadeBitmap(x, y);
 		shaded = true;
+		reShadeBitmap(x, y);
 	}
 
 	x -= scrolled;

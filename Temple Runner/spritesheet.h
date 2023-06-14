@@ -21,12 +21,16 @@ public:
 	static double scale;
 	static double scrolled;
 
+	float opacity = 1.0f;
+
 	SpriteSheet(wchar_t* filename, Graphics* gfx, bool liveRenderShader, bool keepUnShaded);
 	SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, bool keepUnShaded);
 
 	~SpriteSheet();
 
+	//void reShadeBitmap(int spriteX, int spriteY, IWICBitmap* bitmap_optional);
 	void reShadeBitmap(int spriteX, int spriteY);
+	void setOpacity(float opacity);
 
 	void Draw(double x, double y);
 
