@@ -49,13 +49,12 @@ public:
 				int dy = y - radius;
 				double distance = sqrt(dx * dx + dy * dy);
 
-				if (distance <= radius)
-				{
+				if (distance <= radius) {
 					// Get the pixel offset within the pixel buffer
 					int offset = (y * (radius * 2) + x) * bytesPerPixel;
 
 					// Divide the color channels by the alpha value (handle premultiplied alpha)
-					float alpha = round(static_cast<float>(1.0f - (distance / (radius / 0.55f))) * 32) / 128 - 0.11f;
+					float alpha = round(static_cast<float>(1.0f - (distance / (radius / 0.55f))) * 36) / 128 - 0.11f;
 					float invAlpha = 1.0f / alpha;
 					// Set the pixel values based on the calculated brightness
 					pPixels[offset + 0] = static_cast<BYTE>(b);  // Blue component

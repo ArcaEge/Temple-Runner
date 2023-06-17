@@ -22,8 +22,8 @@ public:
 	std::vector<Block*> mainLayer;
 	std::vector<Coin*> coinLayer;
 	std::vector<Light*> lightLayer;
-	std::vector<Sprite*> backgroundLayers[3]; // More big number = more far away
-	std::vector<Sprite*> foregroundLayers[2]; // More big number = more close
+	std::vector<Block*> backgroundLayers[3]; // More big number = more far away
+	std::vector<Block*> foregroundLayers[2]; // More big number = more close
 
 	int scrolledDistance{};
 
@@ -31,6 +31,7 @@ public:
 	~Level();
 
 	//std::vector<Block*>* getMainLayer() { return &mainLayer; };
+	void addLayer(nlohmann::json* layer, int layerNo);
 	
 	void render();
 	void tick();

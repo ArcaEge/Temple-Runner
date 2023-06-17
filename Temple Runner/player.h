@@ -11,6 +11,7 @@ extern std::vector<Coin*>* getCoinLayer();
 class Player : public Sprite {
 	bool isInLiquid = false;
 	double fallingspeed = -10;
+	float lives = 3;
 
 	const double ACCELERATION = 0.5f;
 	const double JUMP_SPEED = 6.0f;
@@ -122,7 +123,10 @@ public:
 	bool canMove(bool right) {
 		bool canMove = true;
 		Block* block = getBlockAt(x + (right ? 16 : 0), y + 28);
-		if (block != nullptr && (block->type == 'b' || block->type == 's' || block->type == 'x')) {
+		Block* blockTop = getBlockAt(x + (right ? 16 : 0), y + 1, 'x');
+		Block* blockLeft = getBlockAt(x + (right ? 16 : 0) - 16, y + 28);
+		Block* blockRight = getBlockAt(x + (right ? 16 : 0) + 16, y + 28);
+		if (blockTop != nullptr || (block != nullptr && (block->type == 'b' || block->type == 's' || block->type == 'x') && (blockLeft == nullptr || blockLeft->type == 'w' || blockLeft->type == 't' || blockRight == nullptr || blockRight->type == 'w' || blockRight->type == 't'))) {
 			canMove = false;
 		}
 		return canMove;

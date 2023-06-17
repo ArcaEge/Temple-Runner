@@ -42,7 +42,7 @@ public:
 	bool toBeDestroyed = false;
 
 	Coin(int x, int y) : Sprite(coin, x, y) {
-		sourceVoice = Audio::LoadAudioFromFile(L"sounds/SFX/coin.wav", audioEngine);
+		this->sourceVoice = Audio::LoadAudioFromFile(L"sounds/SFX/coin.wav", audioEngine);
 	};
 
 	void destroy() {
@@ -53,7 +53,7 @@ public:
 	};
 
 	void tick() {
-		if (toBeDestroyed) {
+		if (this->toBeDestroyed) {
 			frameTimer--;
 			y += 3 - frameTimer/2;
 			if (frameTimer <= 0) {

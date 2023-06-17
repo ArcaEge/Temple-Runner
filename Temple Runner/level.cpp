@@ -33,24 +33,19 @@ Level::Level(char* levelname, Graphics* graphics) {
 
 	for (int layerNo = 0; layerNo < data["layerInstances"].size(); layerNo++) {
 		if (data["layerInstances"][layerNo]["__identifier"] == "MainLayer") {
-			for (int blockNo = 0; blockNo < data["layerInstances"][layerNo]["autoLayerTiles"].size(); blockNo++) {
-				int x = data["layerInstances"][layerNo]["autoLayerTiles"][blockNo]["px"][0];
-				int y = data["layerInstances"][layerNo]["autoLayerTiles"][blockNo]["px"][1];
+			addLayer(&data["layerInstances"][layerNo]["autoLayerTiles"], 0);
 
-				int srcX = data["layerInstances"][layerNo]["autoLayerTiles"][blockNo]["src"][0];
-				int srcY = data["layerInstances"][layerNo]["autoLayerTiles"][blockNo]["src"][1];
-
-				RECT croprect = {srcX, srcY, srcX+16, srcY+16};
-				if (srcX >= 48 && srcX < 95 && srcY == 144) {
-					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y, 't'));
-				} else if (srcX == 128 && srcY >= 128 && srcY <= 144) {
-					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y, 'w'));
-				} else {
-					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y));
-				}
-			}
-
-		} else if (data["layerInstances"][layerNo]["__identifier"] == "Entities") {
+		}
+		else if (data["layerInstances"][layerNo]["__identifier"] == "Background2") {
+			addLayer(&data["layerInstances"][layerNo]["gridTiles"], -2);
+		}
+		else if (data["layerInstances"][layerNo]["__identifier"] == "Background1") {
+			addLayer(&data["layerInstances"][layerNo]["gridTiles"], -1);
+		}
+		else if (data["layerInstances"][layerNo]["__identifier"] == "Foreground1") {
+			addLayer(&data["layerInstances"][layerNo]["gridTiles"], 1);
+		}
+		else if (data["layerInstances"][layerNo]["__identifier"] == "Entities") {
 			for (int entityNo = 0; entityNo < data["layerInstances"][layerNo]["entityInstances"].size(); entityNo++) {
 				if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Spike") {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
@@ -120,6 +115,14 @@ Level::~Level() {
 
 void Level::render() {
 	// Render all sprites
+	for (int i = 0; i < backgroundLayers[2].size(); i++) {
+		backgroundLayers[2][i]->render();
+	}
+
+	for (int i = 0; i < backgroundLayers[1].size(); i++) {
+		backgroundLayers[1][i]->render();
+	}
+
 	for (int i = 0; i < lightLayer.size(); i++) {
 		lightLayer[i]->Draw();
 	}
@@ -133,6 +136,10 @@ void Level::render() {
 	}
 
 	player->render();
+
+	for (int i = 0; i < foregroundLayers[1].size(); i++) {
+		foregroundLayers[1][i]->render();
+	}
 }
 
 void Level::tick() {
@@ -147,6 +154,18 @@ void Level::tick() {
 		SpriteSheet::scrolled -= (width / 5) - (player->x - SpriteSheet::scrolled);
 	}
 	// Tick all sprites
+	for (int i = 0; i < backgroundLayers[2].size(); i++) {
+		backgroundLayers[2][i]->tick();
+	}
+
+	for (int i = 0; i < backgroundLayers[1].size(); i++) {
+		backgroundLayers[1][i]->tick();
+	}
+
+	for (int i = 0; i < foregroundLayers[1].size(); i++) {
+		foregroundLayers[1][i]->tick();
+	}
+
 	for (int i = 0; i < mainLayer.size(); i++) {
 		mainLayer[i]->tick();
 	}
@@ -157,4 +176,44 @@ void Level::tick() {
 
 	player->tick();
 	render();
+}
+
+void Level::addLayer(json* layer, int layerNo) {
+	std::vector<Block*>* layerSprites;
+	bool keepUnShaded = true;
+
+	if (layerNo == 0) {
+		layerSprites = &mainLayer;
+		keepUnShaded = false;
+	}
+	else if (layerNo < 0) {
+		layerSprites = &(backgroundLayers[-layerNo]);
+	}
+	else {
+		layerSprites = &(foregroundLayers[layerNo]);
+	}
+
+	float brightness = 0.75f - (abs(layerNo) * 0.15f);
+	if (layerNo == 0) {
+		brightness = 1.0f;
+	}
+
+	for (int blockNo = 0; blockNo < layer->size(); blockNo++) {
+		int x = (*layer)[blockNo]["px"][0];
+		int y = (*layer)[blockNo]["px"][1];
+
+		int srcX = (*layer)[blockNo]["src"][0];
+		int srcY = (*layer)[blockNo]["src"][1];
+
+		RECT croprect = { srcX, srcY, srcX + 16, srcY + 16 };
+		if (srcX >= 48 && srcX < 95 && srcY == 144) {
+			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y, 't'));
+		}
+		else if (srcX == 128 && srcY >= 128 && srcY <= 144) {
+			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y, 'w'));
+		}
+		else {
+			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y));
+		}
+	}
 }

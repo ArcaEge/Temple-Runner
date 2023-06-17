@@ -137,7 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audio.h" />
-    <ClInclude Include="audiomanager.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="coin.h" />
     <ClInclude Include="json.hpp" />

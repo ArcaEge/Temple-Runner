@@ -14,6 +14,7 @@ class SpriteSheet {
 	bool shaded = false;
 	bool liveRenderShader = false;
 	bool keepUnShaded = false;
+	int layerNo = 0;
 
 	void loadFromImage(wchar_t* filename, bool crop, RECT* croprect);
 
@@ -25,6 +26,7 @@ public:
 
 	SpriteSheet(wchar_t* filename, Graphics* gfx, bool liveRenderShader, bool keepUnShaded);
 	SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, bool keepUnShaded);
+	SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, bool keepUnShaded, int layerNo);
 
 	~SpriteSheet();
 
