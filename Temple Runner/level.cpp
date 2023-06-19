@@ -21,6 +21,7 @@ Level::Level(char* levelname, Graphics* graphics) {
 
 	char* dest;
 
+	text = new Text((wchar_t*)L"fonts/font-outline.png", (wchar_t*)L"Hello, world!", 100, 50, 2);
 	size_t len = strlen(header) + strlen(levelname) + strlen(footer)+1;
 	dest = (char*)malloc(len);
 	dest[len-1] = '\0';
@@ -58,7 +59,7 @@ Level::Level(char* levelname, Graphics* graphics) {
 					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
 
 					player = new Player(x, y-13);
-
+					
 				} else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "LightBlock") {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
 					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
@@ -136,6 +137,7 @@ void Level::render() {
 	}
 
 	player->render();
+	text->Draw();
 
 	for (int i = 0; i < foregroundLayers[1].size(); i++) {
 		foregroundLayers[1][i]->render();

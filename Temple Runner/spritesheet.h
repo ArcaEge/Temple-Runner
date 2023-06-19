@@ -34,6 +34,6 @@ public:
 	void reShadeBitmap(int spriteX, int spriteY);
 	void setOpacity(float opacity);
 
-	void Draw(double x, double y);
+	virtual void Draw(double x, double y);
 
 };

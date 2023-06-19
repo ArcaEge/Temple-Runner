@@ -146,6 +146,7 @@
     <ClInclude Include="graphics.h" />
     <ClInclude Include="level.h" />
     <ClInclude Include="spritesheet.h" />
+    <ClInclude Include="text.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Adventurer_Idle.png" />

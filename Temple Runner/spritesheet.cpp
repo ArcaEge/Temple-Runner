@@ -101,7 +101,7 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 
 	float minBrightness = 0.45f;
 
-	float imageBrightness = minBrightness - (abs(layerNo) * 0.1f);
+	float imageBrightness = minBrightness - 0.05f - (abs(layerNo) * 0.1f);
 	if (layerNo == 0) {
 		imageBrightness = 1.0f;
 	}
@@ -142,16 +142,16 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 					float b = light->b / 255.0f;
 					//br = round(br * 32) / 32;
 
-					brightness_b *= (1 - b * ((float)(light->radius - d) / light->radius) / 2.5f);
-					brightness_g *= (1 - g * ((float)(light->radius - d) / light->radius) / 2.5f);
-					brightness_r *= (1 - r * ((float)(light->radius - d) / light->radius) / 2.5f);
+					brightness_b *= (1 - b * ((float)(light->radius - d) / light->radius) / 5.0f);
+					brightness_g *= (1 - g * ((float)(light->radius - d) / light->radius) / 5.0f);
+					brightness_r *= (1 - r * ((float)(light->radius - d) / light->radius) / 5.0f);
 					brightness += 1 - d / (float)light->radius;
 				}
 
 				brightness = round(brightness * 32) / 32;
 				brightness = (((minBrightness) > ((((1.0f) < (brightness)) ? (1.0f) : (brightness)))) ? (minBrightness) : ((((1.0f) < (brightness)) ? (1.0f) : (brightness))));
 
-				pPixels[offset + 0] = static_cast<BYTE>(pPixels[offset + 0] * minBrightness * 1.1f);  // Blue component
+				pPixels[offset + 0] = static_cast<BYTE>(pPixels[offset + 0] * minBrightness);  // Blue component
 				pPixels[offset + 1] = static_cast<BYTE>(pPixels[offset + 1] * minBrightness);  // Green component
 				pPixels[offset + 2] = static_cast<BYTE>(pPixels[offset + 2] * minBrightness);  // Red component
 

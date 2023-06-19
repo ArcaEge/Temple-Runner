@@ -9,6 +9,7 @@
 #include "coin.h"
 #include "player.h"
 #include "light.h"
+#include "text.h"
 
 #include <vector>
 #include <fstream>
@@ -17,6 +18,7 @@
 class Level {
 	Graphics* gfx;
 	Player* player;
+	Text* text;
 
 public:
 	std::vector<Block*> mainLayer;
