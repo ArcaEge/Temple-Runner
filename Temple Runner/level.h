@@ -9,7 +9,7 @@
 #include "coin.h"
 #include "player.h"
 #include "light.h"
-#include "text.h"
+#include "healthui.h"
 
 #include <vector>
 #include <fstream>
@@ -17,8 +17,8 @@
 
 class Level {
 	Graphics* gfx;
-	Player* player;
-	Text* text;
+
+	int width;
 
 public:
 	std::vector<Block*> mainLayer;
@@ -26,6 +26,9 @@ public:
 	std::vector<Light*> lightLayer;
 	std::vector<Block*> backgroundLayers[3]; // More big number = more far away
 	std::vector<Block*> foregroundLayers[2]; // More big number = more close
+
+	Player* player;
+	HealthUI* hui;
 
 	int scrolledDistance{};
 

@@ -26,6 +26,10 @@ std::vector<Coin*>* getCoinLayer() {
 	return &(level->coinLayer);
 }
 
+HealthUI* getHealthUI() {
+	return level->hui;
+}
+
 using namespace std::chrono;
 
 double calculateScale(int width, int height) {

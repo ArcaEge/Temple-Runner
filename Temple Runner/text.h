@@ -1,5 +1,6 @@
 #pragma once
 #include "spritesheet.h"
+#include <string>
 
 extern Graphics* global_gfx;
 
@@ -35,11 +36,11 @@ class Text {
 	}
 
 public:
-	wchar_t* text;
+	std::wstring text;
 	double size;
 	int x, y;
 
-	Text(wchar_t* path, wchar_t* initialText, int x, int y, double size) {
+	Text(wchar_t* path, std::wstring initialText, int x, int y, double size) {
 		this->text = initialText;
 		this->x = x;
 		this->size = size;
@@ -49,17 +50,19 @@ public:
 	};
 
 	void Draw() {
-		double scale = round(SpriteSheet::scale * size);
+		double scale = SpriteSheet::scale;
 
 		/*x = floor(x);
 		x *= scale;
 		y *= scale;*/
 
-		for (int i = 0; i < wcslen(text); i++) {
+		for (int i = 0; i < text.length(); i++) {
 			for (int letter = 0; letter < wcslen(letters); letter++) {
-				if (text[i] == letters[letter]) {
+				wchar_t a = text.at(i);
+				wchar_t b = letters[letter];
+				if (a == b) {
 					gfx->renderTarget->DrawBitmap(bmp[letter],
-						D2D1::RectF((x + (i * 8)) * scale, y * scale, (x + (8 * i) + 8) * scale, (y + 8) * scale), // Destination Rectangle
+						D2D1::RectF((x + (i * 8)) * scale, y * scale, (x + (8.0f * size * i) + 8.0f * size) * scale, (y + 8.0f * size) * scale), // Destination Rectangle
 						1.0f,
 						D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, // Source Rectangle
 						D2D1::RectF(0.0f, 0.0f, 8, 8)

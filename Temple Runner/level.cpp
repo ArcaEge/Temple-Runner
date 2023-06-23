@@ -15,13 +15,22 @@ Level::Level(char* levelname, Graphics* graphics) {
 	global_level = this;
 	SpriteSheet::scrolled = 0;
 
+	RECT windowSize;
+	GetWindowRect(windowhandle, &windowSize);
+	width = (windowSize.right - windowSize.left) / SpriteSheet::scale;
+
 	// Load level from file
 	const char header[] = "levels/levels/";
 	const char footer[] = ".ldtkl";
 
 	char* dest;
 
-	text = new Text((wchar_t*)L"fonts/font-outline.png", (wchar_t*)L"Hello, world!", 100, 50, 2);
+	RECT fullrect = { 0, 0, 16, 16 };
+	RECT emptyrect = { 16, 0, 32, 16 };
+	hui = new HealthUI(5, 3);
+
+	hui->healthDisplay->health = 2;
+
 	size_t len = strlen(header) + strlen(levelname) + strlen(footer)+1;
 	dest = (char*)malloc(len);
 	dest[len-1] = '\0';
@@ -137,18 +146,19 @@ void Level::render() {
 	}
 
 	player->render();
-	text->Draw();
 
 	for (int i = 0; i < foregroundLayers[1].size(); i++) {
 		foregroundLayers[1][i]->render();
 	}
+
+	hui->render(width);
 }
 
 void Level::tick() {
 	// Get window size and adjust scroll
 	RECT windowSize;
 	GetWindowRect(windowhandle, &windowSize);
-	int width = (windowSize.right - windowSize.left)/SpriteSheet::scale;
+	width = (windowSize.right - windowSize.left)/SpriteSheet::scale;
 
 	if (player->x - SpriteSheet::scrolled > width / 3) {
 		SpriteSheet::scrolled += player->x - SpriteSheet::scrolled - (width / 3);

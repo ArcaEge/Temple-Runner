@@ -25,6 +25,21 @@ SpriteSheet::SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool 
 	loadFromImage(filename, true, croprect);
 }
 
+SpriteSheet::SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, bool keepUnShaded, bool isUIElement) {
+	this->gfx = gfx;
+	bmp = NULL;
+	this->liveRenderShader = liveRenderShader;
+	if (isUIElement) {
+		this->isUIElement = true;
+		this->keepUnShaded = true;
+	}
+	else {
+		this->keepUnShaded = keepUnShaded;
+	}
+
+	loadFromImage(filename, true, croprect);
+}
+
 SpriteSheet::SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, bool keepUnShaded, int layerNo) {
 	this->gfx = gfx;
 	bmp = NULL;
@@ -187,13 +202,13 @@ void SpriteSheet::setOpacity(float opacity) {
 }
 
 void SpriteSheet::Draw(double x, double y) {
-	if ((liveRenderShader || !shaded)) {
+	if ((liveRenderShader || !shaded) && !isUIElement) {
 		shaded = true;
 		reShadeBitmap(x, y);
 	}
 
 	x *= scale;
-	x -= (scrolled * (1 + layerNo/3.0f)) * scale;
+	if (!isUIElement) x -= (scrolled * (1 + layerNo/3.0f)) * scale;
 	x = floor(x);
 	y *= scale;
 

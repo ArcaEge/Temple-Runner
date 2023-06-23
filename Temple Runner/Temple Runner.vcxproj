@@ -139,6 +139,8 @@
     <ClInclude Include="audio.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="coin.h" />
+    <ClInclude Include="healthdisplay.h" />
+    <ClInclude Include="healthui.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="light.h" />
     <ClInclude Include="player.h" />

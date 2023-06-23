@@ -2,16 +2,27 @@
 
 #include "sprite.h"
 #include "spritesheet.h"
+#include "healthui.h"
 #include <WinUser.h>
 
 extern Graphics* global_gfx;
 extern std::vector<Block*>* getMainLayer();
 extern std::vector<Coin*>* getCoinLayer();
+extern HealthUI* getHealthUI();
 
 class Player : public Sprite {
 	bool isInLiquid = false;
 	double fallingspeed = -10;
-	float lives = 3;
+
+	const int MAX_HEALTH = 3;
+	int health = MAX_HEALTH;
+
+	const int MAX_LIVES = 3;
+	int lives = MAX_LIVES;
+
+	const int MAX_INVINCIBLE_TIMER = 60;
+	int invincibleTimer = MAX_INVINCIBLE_TIMER;
+	bool isInvincible = false;
 
 	const double ACCELERATION = 0.5f;
 	const double JUMP_SPEED = 6.0f;
@@ -59,6 +70,8 @@ class Player : public Sprite {
 	};
 
 public:
+	int coins = 0;
+
 	Player(int x, int y) : Sprite(&idle[0], x, y) {};
 
 	void gravity() {
@@ -200,19 +213,19 @@ public:
 
 		int destroyedCoins = 0;
 
-		if (coinBottomLeft != nullptr) {
+		if (coinBottomLeft != nullptr && !coinBottomLeft->toBeDestroyed) {
 			coinBottomLeft->destroy();
 			destroyedCoins++;
 		}
-		if (coinBottomRight != nullptr) {
+		if (coinBottomRight != nullptr && !coinBottomRight->toBeDestroyed) {
 			coinBottomRight->destroy();
 			destroyedCoins++;
 		}
-		if (coinTopLeft != nullptr) {
+		if (coinTopLeft != nullptr && !coinTopLeft->toBeDestroyed) {
 			coinTopLeft->destroy();
 			destroyedCoins++;
 		}
-		if (coinTopRight != nullptr) {
+		if (coinTopRight != nullptr && !coinTopRight->toBeDestroyed) {
 			coinTopRight->destroy();
 			destroyedCoins++;
 		}
@@ -222,7 +235,7 @@ public:
 
 	void tick() {
 		gravity();
-		destroyTouchingCoins();
+		coins += destroyTouchingCoins();
 		//if (fallingspeed >= 0) fallingspeed = 0;
 		animationActive = 0;
 
@@ -256,6 +269,10 @@ public:
 			//sheet = &idle[animationFrame];
 			if (animationFrame > ANIMATION_FRAME_MAX) animationFrame = 0;
 		}
+
+		getHealthUI()->health = health;
+		getHealthUI()->coins = coins;
+		getHealthUI()->lives = lives;
 	}
 
 	virtual void render() {
