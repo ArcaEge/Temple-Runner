@@ -20,7 +20,7 @@ class Player : public Sprite {
 	const int MAX_LIVES = 3;
 	int lives = MAX_LIVES;
 
-	const int MAX_INVINCIBLE_TIMER = 60;
+	const int MAX_INVINCIBLE_TIMER = 160;
 	int invincibleTimer = MAX_INVINCIBLE_TIMER;
 	bool isInvincible = false;
 
@@ -113,6 +113,11 @@ public:
 			}
 			else {
 				if ((blockLeft != nullptr && blockLeft->y == y + 29) || (blockRight != nullptr && blockRight->y == y + 29)) {
+					if (((blockLeft != nullptr && blockLeft->type == 's') || (blockRight != nullptr && blockRight->type == 's')) && !isInvincible) {
+						isInvincible = true;
+						health--;
+						invincibleTimer = MAX_INVINCIBLE_TIMER;
+					}
 					isTouching = true;
 				}
 			}
@@ -236,6 +241,7 @@ public:
 	void tick() {
 		gravity();
 		coins += destroyTouchingCoins();
+
 		//if (fallingspeed >= 0) fallingspeed = 0;
 		animationActive = 0;
 
@@ -266,8 +272,38 @@ public:
 		if (frameTimer <= 0) {
 			frameTimer = MAX_FRAME_TIMER;
 			animationFrame++;
-			//sheet = &idle[animationFrame];
 			if (animationFrame > ANIMATION_FRAME_MAX) animationFrame = 0;
+		}
+
+		if (imageFlipped) {
+			if (animationActive == 0)
+				sheet = &idleFlipped[animationFrame];
+			else if (animationActive == 1)
+				sheet = &walkingFlipped[animationFrame];
+		}
+		else {
+			if (animationActive == 0)
+				sheet = &idle[animationFrame];
+			else if (animationActive == 1)
+				sheet = &walking[animationFrame];
+		}
+
+		if (isInvincible) {
+			if (invincibleTimer > 0) {
+				invincibleTimer--;
+				if ((invincibleTimer/15) % 2 == 0) {
+					sheet->setOpacity(0.25f);
+				}
+				else {
+					sheet->setOpacity(0.75f);
+				}
+			}
+			else {
+				isInvincible = false;
+			}
+		}
+		else {
+			sheet->setOpacity(1.0f);
 		}
 
 		getHealthUI()->health = health;
@@ -276,17 +312,9 @@ public:
 	}
 
 	virtual void render() {
-		if (imageFlipped) {
-			if (animationActive == 0)
-				idleFlipped[animationFrame].Draw(x, y);
-			else if (animationActive == 1)
-				walkingFlipped[animationFrame].Draw(x - 2, y);
-		}
-		else {
-			if (animationActive == 0)
-				idle[animationFrame].Draw(x, y);
-			else if (animationActive == 1)
-				walking[animationFrame].Draw(x - 2, y);
-		}
+		if (animationActive == 0)
+			sheet->Draw(x, y);
+		else if (animationActive == 1)
+			sheet->Draw(x - 2, y);
 	}
 };
