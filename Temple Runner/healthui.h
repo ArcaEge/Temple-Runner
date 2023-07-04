@@ -25,11 +25,11 @@ public:
 
 		RECT fullrect = { 0, 0, 16, 16 };
 		RECT emptyrect = { 16, 0, 32, 16 };
-		healthDisplay = new HealthDisplay(health, new SpriteSheet((wchar_t*)L"health_coin_powerups.png", global_gfx, &fullrect, false, true, true),
-			new SpriteSheet((wchar_t*)L"health_coin_powerups.png", global_gfx, &emptyrect, false, true, true), 5, 5);
+		healthDisplay = new HealthDisplay(health, new SpriteSheet((wchar_t*)L"tilesets\\health_coin_powerups.png", global_gfx, &fullrect, false, true, true),
+			new SpriteSheet((wchar_t*)L"tilesets\\health_coin_powerups.png", global_gfx, &emptyrect, false, true, true), 5, 5);
 
-		coinIcon = new SpriteSheet((wchar_t*)L"health_coin_powerups.png", global_gfx, new RECT{ 64, 0, 80, 16 }, false, true, true);
-		livesIcon = new SpriteSheet((wchar_t*)L"health_coin_powerups.png", global_gfx, new RECT{ 32, 0, 48, 16 }, false, true, true);
+		coinIcon = new SpriteSheet((wchar_t*)L"tilesets\\health_coin_powerups.png", global_gfx, new RECT{ 64, 0, 80, 16 }, false, true, true);
+		livesIcon = new SpriteSheet((wchar_t*)L"tilesets\\health_coin_powerups.png", global_gfx, new RECT{ 32, 0, 48, 16 }, false, true, true);
 
 		std::string l = std::to_string(lives);
 		std::wstring w_l = std::wstring(l.begin(), l.end());

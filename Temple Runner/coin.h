@@ -13,26 +13,26 @@ class Coin : public Sprite {
 	int frameTimer = MAX_FRAME_TIMER;
 
 	SpriteSheet coin[20] = {
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 16,0,32,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 32,0,48,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 48,0,64,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 64,0,80,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 80,0,96,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 96,0,112,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 112,0,128,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 128,0,144,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 144,0,160,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 160,0,176,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 176,0,192,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 192,0,208,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 208,0,224,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
-		*(new SpriteSheet((wchar_t*)L"coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false))
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 16,0,32,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 32,0,48,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 48,0,64,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 64,0,80,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 80,0,96,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 96,0,112,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 112,0,128,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 128,0,144,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 144,0,160,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 160,0,176,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 176,0,192,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 192,0,208,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 208,0,224,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\coin.png", global_gfx, new RECT({ 0,0,16,16 }), false, false))
 	};
 
 	IXAudio2SourceVoice* sourceVoice;

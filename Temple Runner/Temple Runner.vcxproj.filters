@@ -79,10 +79,31 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="TempleTileset.png">
+    <Image Include="tilesets\Adventurer_Idle.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Adventurer_Idle.png">
+    <Image Include="tilesets\Adventurer_Idle_Flipped.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tilesets\Adventurer_Walking.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tilesets\Adventurer_Walking_Flipped.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tilesets\Banner.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tilesets\coin.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tilesets\health_coin_powerups.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tilesets\NatureTileset.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tilesets\TempleTileset.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

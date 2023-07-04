@@ -61,7 +61,7 @@ Level::Level(char* levelname, Graphics* graphics) {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
 					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
 					RECT croprect = { 6*16, 8*16, 7*16, 9*16 };
-					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y, 's'));
+					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"tilesets\\TempleTileset.png", gfx, &croprect, false, false), x, y, 's'));
 
 				} else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "PlayerStart") {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
@@ -74,14 +74,14 @@ Level::Level(char* levelname, Graphics* graphics) {
 					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
 
 					RECT croprect = { 64, 0, 80, 16 };
-					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y));
+					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"tilesets\\TempleTileset.png", gfx, &croprect, false, false), x, y));
 
 				} else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Boundary") {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
 					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
 
 					RECT croprect = { 128, 0, 144, 16 };
-					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, false), x, y, 'x'));
+					mainLayer.push_back(new Block(new SpriteSheet((wchar_t*)L"tilesets\\TempleTileset.png", gfx, &croprect, false, false), x, y, 'x'));
 
 				} else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Coin") {
 					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
@@ -219,13 +219,16 @@ void Level::addLayer(json* layer, int layerNo) {
 
 		RECT croprect = { srcX, srcY, srcX + 16, srcY + 16 };
 		if (srcX >= 48 && srcX < 95 && srcY == 144) {
-			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y, 't'));
+			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"tilesets\\TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y, 't')); // Bridge top
 		}
 		else if (srcX == 128 && srcY >= 128 && srcY <= 144) {
-			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y, 'w'));
+			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"tilesets\\TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y, 'w')); // Water
+		}
+		else if (srcX == 80 && srcY == 112) {
+			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"tilesets\\TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y, 'p')); // Passable
 		}
 		else {
-			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y));
+			layerSprites->push_back(new Block(new SpriteSheet((wchar_t*)L"tilesets\\TempleTileset.png", gfx, &croprect, false, keepUnShaded, layerNo), x, y));
 		}
 	}
 }

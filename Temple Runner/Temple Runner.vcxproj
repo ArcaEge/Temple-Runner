@@ -151,8 +151,15 @@
     <ClInclude Include="text.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Adventurer_Idle.png" />
-    <Image Include="TempleTileset.png" />
+    <Image Include="tilesets\Adventurer_Idle.png" />
+    <Image Include="tilesets\Adventurer_Idle_Flipped.png" />
+    <Image Include="tilesets\Adventurer_Walking.png" />
+    <Image Include="tilesets\Adventurer_Walking_Flipped.png" />
+    <Image Include="tilesets\Banner.png" />
+    <Image Include="tilesets\coin.png" />
+    <Image Include="tilesets\health_coin_powerups.png" />
+    <Image Include="tilesets\NatureTileset.png" />
+    <Image Include="tilesets\TempleTileset.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

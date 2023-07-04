@@ -12,6 +12,9 @@ extern HealthUI* getHealthUI();
 
 class Player : public Sprite {
 	bool isInLiquid = false;
+	bool isOnPassable = false;
+	bool shouldBounce = false;
+	bool passingThrough = false;
 	double fallingspeed = -10;
 
 	const int MAX_HEALTH = 3;
@@ -36,37 +39,37 @@ class Player : public Sprite {
 	bool imageFlipped = false;
 
 	SpriteSheet idle[6] = {
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 40,3,58,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 72,3,90,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 104,3,122,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 136,3,154,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false))
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 40,3,58,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 72,3,90,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 104,3,122,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 136,3,154,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false))
 	};
 	SpriteSheet idleFlipped[6] = {
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 8,3,26,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 40,3,58,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 72,3,90,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 104,3,122,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 136,3,154,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 8,3,26,32 }), true, false))
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 8,3,26,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 40,3,58,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 72,3,90,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 104,3,122,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 136,3,154,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 8,3,26,32 }), true, false))
 	};
 
 	SpriteSheet walking[6]{
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 6,3,28,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 38,3,60,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 70,3,92,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 102,3,124,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 134,3,156,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking.png", global_gfx, new RECT({ 166,3,188,32 }), true, false))
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 6,3,28,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 38,3,60,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 70,3,92,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 102,3,124,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 134,3,156,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 166,3,188,32 }), true, false))
 	};
 	SpriteSheet walkingFlipped[6]{
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 6,3,28,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 38,3,60,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 70,3,92,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 102,3,124,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 134,3,156,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 166,3,188,32 }), true, false))
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 6,3,28,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 38,3,60,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 70,3,92,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 102,3,124,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 134,3,156,32 }), true, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 166,3,188,32 }), true, false))
 	};
 
 public:
@@ -81,7 +84,7 @@ public:
 		if (fallingspeed > 0) {
 			for (int i = 0; i <= fallingspeed; i++) {
 				if (isTouchingBlockVertically(false)) {
-					if (fallingspeed > 8) fallingspeed = -2;
+					if (fallingspeed > 8) shouldBounce = true;
 					else fallingspeed = 0;
 					break;
 				}
@@ -120,6 +123,9 @@ public:
 						health--;
 						invincibleTimer = MAX_INVINCIBLE_TIMER;
 					}
+					if ((blockLeft != nullptr && blockLeft->type == 'p') || (blockRight != nullptr && blockRight->type == 'p')) {
+						isOnPassable = true;
+					}
 					isTouching = true;
 				}
 			}
@@ -146,7 +152,7 @@ public:
 		Block* blockTop = getBlockAt(x + (right ? 16 : 0), y + 1, 'x');
 		Block* blockLeft = getBlockAt(x + (right ? 16 : 0) - 16, y + 28);
 		Block* blockRight = getBlockAt(x + (right ? 16 : 0) + 16, y + 28);
-		if (blockTop != nullptr || (block != nullptr && (block->type == 'b' || block->type == 's' || block->type == 'x') && (blockLeft == nullptr || blockLeft->type == 'w' || blockLeft->type == 't' || blockRight == nullptr || blockRight->type == 'w' || blockRight->type == 't'))) {
+		if (blockTop != nullptr || (block != nullptr && (block->type == 'b' || block->type == 's' || block->type == 'x' || block->type == 'p') && (blockLeft == nullptr || blockLeft->type == 'w' || blockLeft->type == 't' || blockRight == nullptr || blockRight->type == 'w' || blockRight->type == 't'))) {
 			canMove = false;
 		}
 		return canMove;
@@ -241,17 +247,25 @@ public:
 	}
 
 	void tick() {
+		isOnPassable = false;
+		shouldBounce = false;
 		gravity();
+		passingThrough = false;
 		coins += destroyTouchingCoins();
 
 		//if (fallingspeed >= 0) fallingspeed = 0;
 		animationActive = 0;
 
-		if (GetKeyState(VK_SPACE) & 0x8000) {
-			if (isInLiquid)
-				fallingspeed = -JUMP_SPEED / 2;
-			else
-				fallingspeed = -JUMP_SPEED;
+		if (GetKeyState('S') & 0x8000 && isOnPassable) {
+			passingThrough = true;
+			y += 1;
+		} else if (GetKeyState(VK_SPACE) & 0x8000) {
+			//else { // if (isInLiquid || fallingspeed < 0 || isTouchingBlockVertically(false))
+				if (isInLiquid)
+					fallingspeed = -JUMP_SPEED / 2;
+				else
+					fallingspeed = -JUMP_SPEED;
+			//}
 		}
 		if (GetKeyState('A') & 0x8000 && !(GetKeyState('D') & 0x8000) && x > 0) {
 			animationActive = 1;
@@ -306,6 +320,10 @@ public:
 		}
 		else {
 			sheet->setOpacity(1.0f);
+		}
+
+		if (shouldBounce) {
+			fallingspeed = -2;
 		}
 
 		getHealthUI()->health = health;
