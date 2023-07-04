@@ -25,7 +25,7 @@ class Player : public Sprite {
 	bool isInvincible = false;
 
 	const double ACCELERATION = 0.5f;
-	const double JUMP_SPEED = 6.0f;
+	const double JUMP_SPEED = 4.0f;
 
 	int animationFrame = 0;
 	const int ANIMATION_FRAME_MAX = 5;
@@ -75,12 +75,12 @@ public:
 	Player(int x, int y) : Sprite(&idle[0], x, y) {};
 
 	void gravity() {
-		if (!(isTouchingBlockVertically() && fallingspeed > 0)) {
+		if (!(isTouchingBlockVertically(true) && fallingspeed > 0)) {
 			fallingspeed += ACCELERATION;
 		}
 		if (fallingspeed > 0) {
 			for (int i = 0; i <= fallingspeed; i++) {
-				if (isTouchingBlockVertically()) {
+				if (isTouchingBlockVertically(false)) {
 					if (fallingspeed > 8) fallingspeed = -2;
 					else fallingspeed = 0;
 					break;
@@ -99,7 +99,7 @@ public:
 		}
 	}
 
-	bool isTouchingBlockVertically() {
+	bool isTouchingBlockVertically(bool spikeDamage) {
 		bool isTouching = false;
 		bool divideByTwo = false;
 		Block* blockLeft = getBlockAt(x + 1, y + 29);
@@ -113,7 +113,9 @@ public:
 			}
 			else {
 				if ((blockLeft != nullptr && blockLeft->y == y + 29) || (blockRight != nullptr && blockRight->y == y + 29)) {
-					if (((blockLeft != nullptr && blockLeft->type == 's') || (blockRight != nullptr && blockRight->type == 's')) && !isInvincible) {
+
+					// Spike damage
+					if (((blockLeft != nullptr && blockLeft->type == 's') || (blockRight != nullptr && blockRight->type == 's')) && !isInvincible && fallingspeed == 0 && spikeDamage) {
 						isInvincible = true;
 						health--;
 						invincibleTimer = MAX_INVINCIBLE_TIMER;

@@ -20,6 +20,8 @@ class Level {
 
 	int width;
 
+	const float CAMERA_SCROLL_RATE = 0.1f;
+
 public:
 	std::vector<Block*> mainLayer;
 	std::vector<Coin*> coinLayer;

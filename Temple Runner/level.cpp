@@ -161,9 +161,9 @@ void Level::tick() {
 	width = (windowSize.right - windowSize.left)/SpriteSheet::scale;
 
 	if (player->x - SpriteSheet::scrolled > width / 3) {
-		SpriteSheet::scrolled += player->x - SpriteSheet::scrolled - (width / 3);
+		SpriteSheet::scrolled += (player->x - SpriteSheet::scrolled - (width / 3)) * CAMERA_SCROLL_RATE; // Smooth scroll
 	} else if (player->x - SpriteSheet::scrolled < width / 5 && SpriteSheet::scrolled - ((width / 5) - (player->x - SpriteSheet::scrolled)) >= 0) {
-		SpriteSheet::scrolled -= (width / 5) - (player->x - SpriteSheet::scrolled);
+		SpriteSheet::scrolled -= ((width / 5) - (player->x - SpriteSheet::scrolled)) * CAMERA_SCROLL_RATE;
 	}
 	// Tick all sprites
 	for (int i = 0; i < backgroundLayers[2].size(); i++) {
