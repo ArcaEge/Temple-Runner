@@ -5,7 +5,9 @@
 #include <xaudio2.h>
 
 #include "graphics.h"
+#include "globals.h"
 #include "level.h"
+#include "keymanager.h"
 
 Graphics* graphics;
 Level* level;
@@ -78,6 +80,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+	//currentlevel = level;
+
 	// Register the window class.
 	const wchar_t CLASS_NAME[] = L"TempleRunner";
 
@@ -144,6 +148,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		if (duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - lasttime > 12) {
 			lasttime = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+			KeyboardManager::update();
 			level->tick();
 		}
 	}

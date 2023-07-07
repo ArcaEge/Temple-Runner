@@ -2492,9 +2492,9 @@
 		{
 			"__cWid": 9,
 			"__cHei": 10,
-			"identifier": "TempleTileset",
+			"identifier": "TempleTileset2",
 			"uid": 3,
-			"relPath": "../TempleTileset.png",
+			"relPath": "../tilesets/TempleTileset.png",
 			"embedAtlas": null,
 			"pxWid": 144,
 			"pxHei": 160,
@@ -2514,9 +2514,9 @@
 		{
 			"__cWid": 14,
 			"__cHei": 1,
-			"identifier": "Coin",
+			"identifier": "Coin2",
 			"uid": 355,
-			"relPath": "../coin.png",
+			"relPath": "../tilesets/coin.png",
 			"embedAtlas": null,
 			"pxWid": 224,
 			"pxHei": 16,

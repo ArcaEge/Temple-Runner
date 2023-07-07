@@ -129,9 +129,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="audio.cpp" />
+    <ClCompile Include="globals.cpp" />
     <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="keymanager.cpp" />
     <ClCompile Include="level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="spritesheet.cpp" />
   </ItemGroup>
@@ -139,9 +142,11 @@
     <ClInclude Include="audio.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="coin.h" />
+    <ClInclude Include="globals.h" />
     <ClInclude Include="healthdisplay.h" />
     <ClInclude Include="healthui.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="keymanager.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="sprite.h" />

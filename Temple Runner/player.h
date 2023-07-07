@@ -3,7 +3,9 @@
 #include "sprite.h"
 #include "spritesheet.h"
 #include "healthui.h"
-#include <WinUser.h>
+#include "keymanager.h"
+#include "coin.h"
+#include "block.h"
 
 extern Graphics* global_gfx;
 extern std::vector<Block*>* getMainLayer();
@@ -11,12 +13,6 @@ extern std::vector<Coin*>* getCoinLayer();
 extern HealthUI* getHealthUI();
 
 class Player : public Sprite {
-	bool isInLiquid = false;
-	bool isOnPassable = false;
-	bool shouldBounce = false;
-	bool passingThrough = false;
-	double fallingspeed = -10;
-
 	const int MAX_HEALTH = 3;
 	int health = MAX_HEALTH;
 
@@ -74,18 +70,24 @@ class Player : public Sprite {
 
 public:
 	int coins = 0;
+	bool isInLiquid = false;
+	bool isOnPassable = false;
+	bool touchingBlock = false;
+	bool passingThrough = false;
+	double fallingspeed = -10;
 
-	Player(int x, int y) : Sprite(&idle[0], x, y) {};
+	Player(int x, int y);
 
 	void gravity() {
-		if (!(isTouchingBlockVertically(true) && fallingspeed > 0)) {
+		touchingBlock = isTouchingBlockVertically(true);
+		if (!(touchingBlock && fallingspeed > 0)) {
 			fallingspeed += ACCELERATION;
 		}
 		if (fallingspeed > 0) {
 			for (int i = 0; i <= fallingspeed; i++) {
 				if (isTouchingBlockVertically(false)) {
-					if (fallingspeed > 8) shouldBounce = true;
-					else fallingspeed = 0;
+					//if (fallingspeed > 8) shouldBounce = true;
+					fallingspeed = 0;
 					break;
 				}
 				move(0, 1);
@@ -100,6 +102,7 @@ public:
 				move(0, -1);
 			}
 		}
+		touchingBlock = isTouchingBlockVertically(false);
 	}
 
 	bool isTouchingBlockVertically(bool spikeDamage) {
@@ -248,7 +251,6 @@ public:
 
 	void tick() {
 		isOnPassable = false;
-		shouldBounce = false;
 		gravity();
 		passingThrough = false;
 		coins += destroyTouchingCoins();
@@ -256,18 +258,18 @@ public:
 		//if (fallingspeed >= 0) fallingspeed = 0;
 		animationActive = 0;
 
-		if (GetKeyState('S') & 0x8000 && isOnPassable) {
+		/*if (KeyboardManager::isPressed(2) && fallingspeed <= 0 && touchingBlock && isOnPassable) {
 			passingThrough = true;
 			y += 1;
-		} else if (GetKeyState(VK_SPACE) & 0x8000) {
-			//else { // if (isInLiquid || fallingspeed < 0 || isTouchingBlockVertically(false))
+		} else */if (KeyboardManager::isPressed(4)) {
+			if (isInLiquid || fallingspeed < 0 || isTouchingBlockVertically(false)) {
 				if (isInLiquid)
 					fallingspeed = -JUMP_SPEED / 2;
 				else
 					fallingspeed = -JUMP_SPEED;
-			//}
+			}
 		}
-		if (GetKeyState('A') & 0x8000 && !(GetKeyState('D') & 0x8000) && x > 0) {
+		if (KeyboardManager::isPressed(1) && !(KeyboardManager::isPressed(3)) && x > 0) {
 			animationActive = 1;
 			imageFlipped = true;
 			if (isInLiquid)
@@ -275,7 +277,7 @@ public:
 			else
 				moveXWithCollision(-2);
 		}
-		if (GetKeyState('D') & 0x8000 && !(GetKeyState('A') & 0x8000)) {
+		if (KeyboardManager::isPressed(3) && !(KeyboardManager::isPressed(1))) {
 			imageFlipped = false;
 			animationActive = 1;
 			if (isInLiquid)
@@ -320,10 +322,6 @@ public:
 		}
 		else {
 			sheet->setOpacity(1.0f);
-		}
-
-		if (shouldBounce) {
-			fallingspeed = -2;
 		}
 
 		getHealthUI()->health = health;

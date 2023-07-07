@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Sprites">
       <UniqueIdentifier>{571cdc40-0d97-449d-9385-e3df9860a365}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Sprites">
+      <UniqueIdentifier>{d13b5d56-c23d-4a93-8f60-4f71b80279e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,6 +38,15 @@
     </ClCompile>
     <ClCompile Include="audio.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="keymanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Source Files\Sprites</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +87,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="healthui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="keymanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
