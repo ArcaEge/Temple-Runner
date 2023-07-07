@@ -12,6 +12,7 @@ class SpriteSheet {
 	IWICImagingFactory* wicFactory;
 
 	bool shaded = false;
+	bool flipped = false;
 	bool liveRenderShader = false;
 	bool keepUnShaded = false;
 	bool isUIElement = false;
@@ -24,11 +25,13 @@ public:
 	static double scrolled;
 
 	float opacity = 1.0f;
+	float brightnessmultiplier = 1.0f;
 
 	SpriteSheet(wchar_t* filename, Graphics* gfx, bool liveRenderShader, bool keepUnShaded);
 	SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, bool keepUnShaded);
 	SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, bool keepUnShaded, bool isUIElement);
 	SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, bool keepUnShaded, int layerNo);
+	SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool liveRenderShader, float brightnessmultiplier, bool flip);
 
 	~SpriteSheet();
 

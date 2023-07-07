@@ -26,46 +26,48 @@ class Player : public Sprite {
 	const double ACCELERATION = 0.5f;
 	const double JUMP_SPEED = 4.0f;
 
-	int animationFrame = 0;
-	const int ANIMATION_FRAME_MAX = 5;
+	int animationIdleFrame = 0;
+	int animationRunningFrame = 0;
+	const int ANIMATION_IDLE_MAX = 3;
+	const int ANIMATION_RUNNING_MAX = 5;
 	const int MAX_FRAME_TIMER = 8;
 	int frameTimer = MAX_FRAME_TIMER;
 
+	const int IMG_OFFSET_X = -15;
+	const int IMG_OFFSET_Y = -7;
 	int animationActive = 0; // 0 = idle, 1 = run
 	bool imageFlipped = false;
 
-	SpriteSheet idle[6] = {
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 40,3,58,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 72,3,90,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 104,3,122,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 136,3,154,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle.png", global_gfx, new RECT({ 8,3,26,32 }), true, false))
+	SpriteSheet idle[4] = {
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 0,  0,50, 38 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 50, 0,100,38 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 100,0,150,38 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 150,0,200,38 }), true, 1.2f, false)),
 	};
 	SpriteSheet idleFlipped[6] = {
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 8,3,26,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 40,3,58,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 72,3,90,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 104,3,122,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 136,3,154,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Idle_Flipped.png", global_gfx, new RECT({ 8,3,26,32 }), true, false))
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 0,  0,50, 38 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 50, 0,100,38 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 100,0,150,38 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 150,0,200,38 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,0,250,38 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 250,0,300,38 }), true, 1.2f, true)),
 	};
 
-	SpriteSheet walking[6]{
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 6,3,28,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 38,3,60,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 70,3,92,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 102,3,124,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 134,3,156,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking.png", global_gfx, new RECT({ 166,3,188,32 }), true, false))
+	SpriteSheet running[6]{
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 50, 37,100,75 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 100,37,150,75 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 150,37,200,75 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 200,37,250,75 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 250,37,300,75 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 300,37,350,75 }), true, 1.2f, false)),
 	};
-	SpriteSheet walkingFlipped[6]{
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 6,3,28,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 38,3,60,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 70,3,92,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 102,3,124,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 134,3,156,32 }), true, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\Adventurer_Walking_Flipped.png", global_gfx, new RECT({ 166,3,188,32 }), true, false))
+	SpriteSheet runningFlipped[6]{
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 50, 37,100,75 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 100,37,150,75 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 150,37,200,75 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,37,250,75 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 250,37,300,75 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 300,37,350,75 }), true, 1.2f, true)),
 	};
 
 public:
@@ -78,176 +80,18 @@ public:
 
 	Player(int x, int y);
 
-	void gravity() {
-		touchingBlock = isTouchingBlockVertically(true);
-		if (!(touchingBlock && fallingspeed > 0)) {
-			fallingspeed += ACCELERATION;
-		}
-		if (fallingspeed > 0) {
-			for (int i = 0; i <= fallingspeed; i++) {
-				if (isTouchingBlockVertically(false)) {
-					//if (fallingspeed > 8) shouldBounce = true;
-					fallingspeed = 0;
-					break;
-				}
-				move(0, 1);
-			}
-		}
-		else {
-			for (int i = 0; i <= -fallingspeed; i++) {
-				if (isTouchingBlockTop()) {
-					fallingspeed = 0;
-					break;
-				}
-				move(0, -1);
-			}
-		}
-		touchingBlock = isTouchingBlockVertically(false);
-	}
+	void gravity();
 
-	bool isTouchingBlockVertically(bool spikeDamage) {
-		bool isTouching = false;
-		bool divideByTwo = false;
-		Block* blockLeft = getBlockAt(x + 1, y + 29);
-		Block* blockRight = getBlockAt(x + 15, y + 29);
-		if ((blockLeft != nullptr && (blockLeft->type != 't')) || (blockRight != nullptr && (blockRight->type != 't'))) {
+	bool isTouchingBlockVertically(bool spikeDamage);
+	bool isTouchingBlockTop();
 
-			if (((blockLeft == nullptr || blockLeft->type == 'w') && blockRight != nullptr && blockRight->type == 'w') ||
-				((blockRight == nullptr || blockRight->type == 'w') && blockLeft != nullptr && blockLeft->type == 'w')) {
+	bool canMove(bool right);
+	void moveXWithCollision(int x);
+	Block* getBlockAt(int x, int y);
+	Block* getBlockAt(int x, int y, char type);
 
-				divideByTwo = true;
-			}
-			else {
-				if ((blockLeft != nullptr && blockLeft->y == y + 29) || (blockRight != nullptr && blockRight->y == y + 29)) {
-
-					// Spike damage
-					if (((blockLeft != nullptr && blockLeft->type == 's') || (blockRight != nullptr && blockRight->type == 's')) && !isInvincible && fallingspeed == 0 && spikeDamage) {
-						isInvincible = true;
-						health--;
-						invincibleTimer = MAX_INVINCIBLE_TIMER;
-					}
-					if ((blockLeft != nullptr && blockLeft->type == 'p') || (blockRight != nullptr && blockRight->type == 'p')) {
-						isOnPassable = true;
-					}
-					isTouching = true;
-				}
-			}
-
-		}
-		if (divideByTwo) fallingspeed /= 2;
-		isInLiquid = divideByTwo;
-		return isTouching && !divideByTwo;
-	}
-
-	bool isTouchingBlockTop() {
-		bool isTouching = false;
-		Block* blockLeft = getBlockAt(x + 1, y, 'x');
-		Block* blockRight = getBlockAt(x + 15, y, 'x');
-		if (blockLeft != nullptr || blockRight != nullptr) {
-			isTouching = true;
-		}
-		return isTouching;
-	}
-
-	bool canMove(bool right) {
-		bool canMove = true;
-		Block* block = getBlockAt(x + (right ? 16 : 0), y + 28);
-		Block* blockTop = getBlockAt(x + (right ? 16 : 0), y + 1, 'x');
-		Block* blockLeft = getBlockAt(x + (right ? 16 : 0) - 16, y + 28);
-		Block* blockRight = getBlockAt(x + (right ? 16 : 0) + 16, y + 28);
-		if (blockTop != nullptr || (block != nullptr && (block->type == 'b' || block->type == 's' || block->type == 'x' || block->type == 'p') && (blockLeft == nullptr || blockLeft->type == 'w' || blockLeft->type == 't' || blockRight == nullptr || blockRight->type == 'w' || blockRight->type == 't'))) {
-			canMove = false;
-		}
-		return canMove;
-	}
-
-	Block* getBlockAt(int x, int y) {
-		Block* block = nullptr;
-		for (int i = 0; i < getMainLayer()->size(); i++) {
-			int blockX = getMainLayer()->at(i)->x;
-			int blockY = getMainLayer()->at(i)->y;
-			if (x >= blockX && x < blockX + 16 && y >= blockY && y < blockY + 16) {
-				block = getMainLayer()->at(i);
-				break;
-			}
-		}
-		return block;
-	}
-
-	Block* getBlockAt(int x, int y, char type) {
-		Block* block = nullptr;
-		for (int i = 0; i < getMainLayer()->size(); i++) {
-			int blockX = getMainLayer()->at(i)->x;
-			int blockY = getMainLayer()->at(i)->y;
-			if (x >= blockX && x < blockX + 16 && y >= blockY && y < blockY + 16 && getMainLayer()->at(i)->type == type) {
-				block = getMainLayer()->at(i);
-				break;
-			}
-		}
-		return block;
-	}
-
-	Coin* getCoinAt(int x, int y) {
-		Coin* coin = nullptr;
-		for (int i = 0; i < getCoinLayer()->size(); i++) {
-			int coinX = getCoinLayer()->at(i)->x;
-			int coinY = getCoinLayer()->at(i)->y;
-			if (x >= coinX && x < coinX + 16 && y >= coinY && y < coinY + 16) {
-				coin = getCoinLayer()->at(i);
-				break;
-			}
-		}
-		return coin;
-	}
-
-	void moveXWithCollision(int x) {
-		for (int i = 0; i < abs(x); i++) {
-			if (x > 0) {
-				if (canMove(true)) {
-					this->x++;
-				}
-				else {
-					break;
-				}
-			}
-			else {
-				if (canMove(false)) {
-					this->x--;
-				}
-				else {
-					break;
-				}
-			}
-		}
-	}
-
-	int destroyTouchingCoins() {
-		Coin* coinBottomLeft = getCoinAt(x + 3, y + 25);
-		Coin* coinBottomRight = getCoinAt(x + 13, y + 25);
-		Coin* coinTopLeft = getCoinAt(x + 3, y + 3);
-		Coin* coinTopRight = getCoinAt(x + 13, y + 3);
-
-		int destroyedCoins = 0;
-
-		if (coinBottomLeft != nullptr && !coinBottomLeft->toBeDestroyed) {
-			coinBottomLeft->destroy();
-			destroyedCoins++;
-		}
-		if (coinBottomRight != nullptr && !coinBottomRight->toBeDestroyed) {
-			coinBottomRight->destroy();
-			destroyedCoins++;
-		}
-		if (coinTopLeft != nullptr && !coinTopLeft->toBeDestroyed) {
-			coinTopLeft->destroy();
-			destroyedCoins++;
-		}
-		if (coinTopRight != nullptr && !coinTopRight->toBeDestroyed) {
-			coinTopRight->destroy();
-			destroyedCoins++;
-		}
-
-		return destroyedCoins;
-	}
+	Coin* getCoinAt(int x, int y);
+	int destroyTouchingCoins();
 
 	void tick() {
 		isOnPassable = false;
@@ -258,11 +102,8 @@ public:
 		//if (fallingspeed >= 0) fallingspeed = 0;
 		animationActive = 0;
 
-		/*if (KeyboardManager::isPressed(2) && fallingspeed <= 0 && touchingBlock && isOnPassable) {
-			passingThrough = true;
-			y += 1;
-		} else */if (KeyboardManager::isPressed(4)) {
-			if (isInLiquid || fallingspeed < 0 || isTouchingBlockVertically(false)) {
+		if (KeyboardManager::isPressed(4)) {
+			if (isInLiquid || fallingspeed < 0 || isTouchingBlockVertically(true)) {
 				if (isInLiquid)
 					fallingspeed = -JUMP_SPEED / 2;
 				else
@@ -289,27 +130,39 @@ public:
 		frameTimer--;
 		if (frameTimer <= 0) {
 			frameTimer = MAX_FRAME_TIMER;
-			animationFrame++;
-			if (animationFrame > ANIMATION_FRAME_MAX) animationFrame = 0;
-		}
 
-		if (imageFlipped) {
-			if (animationActive == 0)
-				sheet = &idleFlipped[animationFrame];
-			else if (animationActive == 1)
-				sheet = &walkingFlipped[animationFrame];
-		}
-		else {
-			if (animationActive == 0)
-				sheet = &idle[animationFrame];
-			else if (animationActive == 1)
-				sheet = &walking[animationFrame];
+			if (animationIdleFrame > ANIMATION_IDLE_MAX) animationIdleFrame = 0;
+			if (animationRunningFrame > ANIMATION_RUNNING_MAX) animationRunningFrame = 0;
+
+			if (imageFlipped) {
+				if (animationActive == 0) {
+					sheet = &idleFlipped[animationIdleFrame];
+					animationRunningFrame = 0;
+				}
+				else if (animationActive == 1) {
+					sheet = &runningFlipped[animationRunningFrame];
+					animationIdleFrame = 0;
+				}
+			}
+			else {
+				if (animationActive == 0) {
+					sheet = &idle[animationIdleFrame];
+					animationRunningFrame = 0;
+				}
+				else if (animationActive == 1) {
+					sheet = &running[animationRunningFrame];
+					animationIdleFrame = 0;
+				}
+			}
+
+			animationIdleFrame++;
+			animationRunningFrame++;
 		}
 
 		if (isInvincible) {
 			if (invincibleTimer > 0) {
 				invincibleTimer--;
-				if ((invincibleTimer/15) % 2 == 0) {
+				if ((invincibleTimer / 15) % 2 == 0) {
 					sheet->setOpacity(0.25f);
 				}
 				else {
@@ -329,10 +182,5 @@ public:
 		getHealthUI()->lives = lives;
 	}
 
-	virtual void render() {
-		if (animationActive == 0)
-			sheet->Draw(x, y);
-		else if (animationActive == 1)
-			sheet->Draw(x - 2, y);
-	}
+	void render();
 };

@@ -2160,7 +2160,7 @@
 					"__pivot": [0.5,0.188],
 					"__tags": [],
 					"__tile": null,
-					"__smartColor": "#FFC800",
+					"__smartColor": "#EFE054",
 					"iid": "919c4990-ed50-11ed-a67b-7156640718c2",
 					"width": 16,
 					"height": 16,
@@ -2168,7 +2168,7 @@
 					"px": [264,179],
 					"fieldInstances": [
 						{ "__identifier": "Radius", "__type": "Int", "__value": 512, "__tile": null, "defUid": 348, "realEditorValues": [{ "id": "V_Int", "params": [512] }] },
-						{ "__identifier": "Color", "__type": "Color", "__value": "#FFC800", "__tile": null, "defUid": 350, "realEditorValues": [{ "id": "V_Int", "params": [16762880] }] }
+						{ "__identifier": "Color", "__type": "Color", "__value": "#EFE054", "__tile": null, "defUid": 350, "realEditorValues": [{ "id": "V_Int", "params": [15720532] }] }
 					]
 				},
 				{
