@@ -28,9 +28,15 @@ class Player : public Sprite {
 
 	int animationIdleFrame = 0;
 	int animationRunningFrame = 0;
+	int animationJumpingFrame = 0;
+	int animationFallingFrame = 0;
+
 	const int ANIMATION_IDLE_MAX = 3;
 	const int ANIMATION_RUNNING_MAX = 5;
-	const int MAX_FRAME_TIMER = 8;
+	const int ANIMATION_JUMPING_MAX = 3;
+	const int ANIMATION_FALLING_MAX = 5;
+
+	const int MAX_FRAME_TIMER = 5;
 	int frameTimer = MAX_FRAME_TIMER;
 
 	const int IMG_OFFSET_X = -15;
@@ -68,6 +74,38 @@ class Player : public Sprite {
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,37,250,75 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 250,37,300,75 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 300,37,350,75 }), true, 1.2f, true)),
+	};
+
+	SpriteSheet jumping[4]{
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 0,  75,50, 112 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 50, 75,100,112 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 100,75,150,112 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 150,75,200,112 }), true, 1.2f, false)),
+
+	};
+	SpriteSheet jumpingFlipped[4]{
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 0,  75,50, 112 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 50, 75,100,112 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 100,75,150,112 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 150,75,200,112 }), true, 1.2f, true)),
+
+	};
+
+	SpriteSheet falling[6]{
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 200,75,250,112 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 250,75,300,112 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 300,75,350,112 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 1,111,50,148 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 50, 111,100,148 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 100,111,150,148 }), true, 1.2f, false)),
+	};
+	SpriteSheet fallingFlipped[6]{
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,75,250,112 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 250,75,300,112 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 300,75,350,112 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 1,111,50,148 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 50, 111,100,148 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 100,111,150,148 }), true, 1.2f, true)),
 	};
 
 public:
@@ -133,30 +171,66 @@ public:
 
 			if (animationIdleFrame > ANIMATION_IDLE_MAX) animationIdleFrame = 0;
 			if (animationRunningFrame > ANIMATION_RUNNING_MAX) animationRunningFrame = 0;
+			if (animationJumpingFrame > ANIMATION_JUMPING_MAX) animationJumpingFrame = 2;
+			if (animationFallingFrame > ANIMATION_FALLING_MAX) animationFallingFrame = 4;
 
 			if (imageFlipped) {
-				if (animationActive == 0) {
+				if (fallingspeed < 0) {
+					sheet = &jumpingFlipped[animationJumpingFrame];
+					animationRunningFrame = 0;
+					animationFallingFrame = 0;
+					animationIdleFrame = 0;
+				}
+				else if (fallingspeed > 0) {
+					sheet = &fallingFlipped[animationFallingFrame];
+					animationRunningFrame = 0;
+					animationIdleFrame = 0;
+					animationJumpingFrame = 0;
+				}
+				else if (animationActive == 0) {
 					sheet = &idleFlipped[animationIdleFrame];
 					animationRunningFrame = 0;
+					animationJumpingFrame = 0;
+					animationFallingFrame = 0;
 				}
 				else if (animationActive == 1) {
 					sheet = &runningFlipped[animationRunningFrame];
 					animationIdleFrame = 0;
+					animationJumpingFrame = 0;
+					animationFallingFrame = 0;
 				}
 			}
 			else {
-				if (animationActive == 0) {
+				if (fallingspeed < 0) {
+					sheet = &jumping[animationJumpingFrame];
+					animationRunningFrame = 0;
+					animationFallingFrame = 0;
+					animationIdleFrame = 0;
+				}
+				else if (fallingspeed > 0) {
+					sheet = &falling[animationFallingFrame];
+					animationRunningFrame = 0;
+					animationIdleFrame = 0;
+					animationJumpingFrame = 0;
+				}
+				else if (animationActive == 0) {
 					sheet = &idle[animationIdleFrame];
 					animationRunningFrame = 0;
+					animationJumpingFrame = 0;
+					animationFallingFrame = 0;
 				}
 				else if (animationActive == 1) {
 					sheet = &running[animationRunningFrame];
 					animationIdleFrame = 0;
+					animationJumpingFrame = 0;
+					animationFallingFrame = 0;
 				}
 			}
 
 			animationIdleFrame++;
 			animationRunningFrame++;
+			animationJumpingFrame++;
+			animationFallingFrame++;
 		}
 
 		if (isInvincible) {
