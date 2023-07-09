@@ -2534,6 +2534,34 @@
 					"defUid": 356,
 					"px": [736,176],
 					"fieldInstances": []
+				},
+				{
+					"__identifier": "Spring",
+					"__grid": [36,16],
+					"__pivot": [0,0],
+					"__tags": [],
+					"__tile": { "tilesetUid": 367, "x": 0, "y": 0, "w": 16, "h": 16 },
+					"__smartColor": "#EAD4AA",
+					"iid": "6b4a22e0-1460-11ee-ba00-692f4d03d8a0",
+					"width": 16,
+					"height": 16,
+					"defUid": 365,
+					"px": [576,256],
+					"fieldInstances": [{ "__identifier": "Force", "__type": "Int", "__value": 15, "__tile": null, "defUid": 368, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Spring",
+					"__grid": [42,14],
+					"__pivot": [0,0],
+					"__tags": [],
+					"__tile": { "tilesetUid": 367, "x": 0, "y": 0, "w": 16, "h": 16 },
+					"__smartColor": "#EAD4AA",
+					"iid": "83c93180-1460-11ee-ba00-6f53d21badc6",
+					"width": 16,
+					"height": 16,
+					"defUid": 365,
+					"px": [672,224],
+					"fieldInstances": [{ "__identifier": "Force", "__type": "Int", "__value": 15, "__tile": null, "defUid": 368, "realEditorValues": [] }]
 				}
 			]
 		}

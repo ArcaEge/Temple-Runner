@@ -34,9 +34,9 @@ class Player : public Sprite {
 	const int ANIMATION_IDLE_MAX = 3;
 	const int ANIMATION_RUNNING_MAX = 5;
 	const int ANIMATION_JUMPING_MAX = 3;
-	const int ANIMATION_FALLING_MAX = 5;
+	const int ANIMATION_FALLING_MAX = 1;
 
-	const int MAX_FRAME_TIMER = 5;
+	const int MAX_FRAME_TIMER = 7;
 	int frameTimer = MAX_FRAME_TIMER;
 
 	const int IMG_OFFSET_X = -15;
@@ -91,19 +91,19 @@ class Player : public Sprite {
 
 	};
 
-	SpriteSheet falling[6]{
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 200,75,250,112 }), true, 1.2f, false)),
+	SpriteSheet falling[2]{
+		/**(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 200,75,250,112 }), true, 1.2f, false)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 250,75,300,112 }), true, 1.2f, false)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 300,75,350,112 }), true, 1.2f, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 1,111,50,148 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 1,111,50,148 }), true, 1.2f, false)),*/
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 50, 111,100,148 }), true, 1.2f, false)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 100,111,150,148 }), true, 1.2f, false)),
 	};
-	SpriteSheet fallingFlipped[6]{
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,75,250,112 }), true, 1.2f, true)),
+	SpriteSheet fallingFlipped[2]{
+		/**(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,75,250,112 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 250,75,300,112 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 300,75,350,112 }), true, 1.2f, true)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 1,111,50,148 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 1,111,50,148 }), true, 1.2f, true)),*/
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 50, 111,100,148 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 100,111,150,148 }), true, 1.2f, true)),
 	};
@@ -172,7 +172,7 @@ public:
 			if (animationIdleFrame > ANIMATION_IDLE_MAX) animationIdleFrame = 0;
 			if (animationRunningFrame > ANIMATION_RUNNING_MAX) animationRunningFrame = 0;
 			if (animationJumpingFrame > ANIMATION_JUMPING_MAX) animationJumpingFrame = 2;
-			if (animationFallingFrame > ANIMATION_FALLING_MAX) animationFallingFrame = 4;
+			if (animationFallingFrame > ANIMATION_FALLING_MAX) animationFallingFrame = 0;
 
 			if (imageFlipped) {
 				if (fallingspeed < 0) {

@@ -8,6 +8,7 @@
 #include "block.h"
 #include "coin.h"
 #include "player.h"
+#include "spring.h"
 #include "light.h"
 #include "healthui.h"
 
@@ -25,6 +26,7 @@ class Level {
 public:
 	std::vector<Block*> mainLayer;
 	std::vector<Coin*> coinLayer;
+	std::vector<Spring*> springLayer;
 	std::vector<Light*> lightLayer;
 	std::vector<Block*> backgroundLayers[3]; // More big number = more far away
 	std::vector<Block*> foregroundLayers[2]; // More big number = more close

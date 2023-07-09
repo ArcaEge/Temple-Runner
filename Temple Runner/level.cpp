@@ -114,6 +114,20 @@ Level::Level(char* levelname, Graphics* graphics) {
 
 					lightLayer.push_back(new Light(x, y, radius, gfx, &SpriteSheet::scrolled, &SpriteSheet::scale, r, g, b));
 				}
+				else if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["__identifier"] == "Spring") {
+					int x = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][0];
+					int y = data["layerInstances"][layerNo]["entityInstances"][entityNo]["px"][1];
+					int force = 64;
+
+					for (int i = 0; i < data["layerInstances"][layerNo]["entityInstances"][entityNo]["fieldInstances"].size(); i++) {
+						if (data["layerInstances"][layerNo]["entityInstances"][entityNo]["fieldInstances"][i]["__identifier"] == "Force") {
+							force = data["layerInstances"][layerNo]["entityInstances"][entityNo]["fieldInstances"][i]["__value"];
+
+						}
+					}
+
+					springLayer.push_back(new Spring(force, x, y, player, &mainLayer));
+				}
 			}
 		}
 	}
@@ -139,6 +153,10 @@ void Level::render() {
 
 	for (int i = 0; i < mainLayer.size(); i++) {
 		mainLayer[i]->render();
+	}
+
+	for (int i = 0; i < springLayer.size(); i++) {
+		springLayer[i]->render();
 	}
 
 	for (int i = 0; i < coinLayer.size(); i++) {
@@ -180,6 +198,10 @@ void Level::tick() {
 
 	for (int i = 0; i < mainLayer.size(); i++) {
 		mainLayer[i]->tick();
+	}
+
+	for (int i = 0; i < springLayer.size(); i++) {
+		springLayer[i]->tick();
 	}
 
 	for (int i = 0; i < coinLayer.size(); i++) {

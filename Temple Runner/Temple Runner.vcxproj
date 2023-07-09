@@ -149,6 +149,7 @@
     <ClInclude Include="keymanager.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="spring.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="level.h" />
