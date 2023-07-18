@@ -64,7 +64,6 @@ SpriteSheet::SpriteSheet(wchar_t* filename, Graphics* gfx, RECT* croprect, bool 
 SpriteSheet::~SpriteSheet() {
 	if (wicFactory) wicFactory->Release();
 	if (bitmap) bitmap->Release();
-	if (&bitmap) bitmap->Release();
 }
 
 void SpriteSheet::loadFromImage(wchar_t* filename, bool crop, RECT* croprect) {
@@ -76,22 +75,22 @@ void SpriteSheet::loadFromImage(wchar_t* filename, bool crop, RECT* croprect) {
 	hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&wicFactory);
 
 
-	IWICBitmapDecoder* wicDecoder = NULL;
+	ComPtr<IWICBitmapDecoder> wicDecoder = NULL;
 	hr = wicFactory->CreateDecoderFromFilename(filename, NULL, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &wicDecoder);
 
 	//if (hr != S_OK) return;
 
-	IWICBitmapFrameDecode* wicFrame = NULL;
+	ComPtr<IWICBitmapFrameDecode> wicFrame = NULL;
 	hr = wicDecoder->GetFrame(0, &wicFrame); // O == Frame number
 
-	IWICFormatConverter* wicConverter = NULL;
+	//ComPtr<IWICFormatConverter> wicConverter = NULL;
 	hr = wicFactory->CreateFormatConverter(&wicConverter);
 
-	bitmap = (IWICBitmap*)wicFrame;
+	bitmap = (IWICBitmap*)wicFrame.Get();
 
 	if (crop) {
 		// Crop
-		IWICBitmap* wicCroppedBitmap = NULL;
+		ComPtr<IWICBitmap> wicCroppedBitmap = NULL;
 		if (flipped) {
 			UINT width = 0, height = 0;
 			bitmap->GetSize(&width, &height);
@@ -99,15 +98,15 @@ void SpriteSheet::loadFromImage(wchar_t* filename, bool crop, RECT* croprect) {
 			croprect->left = width - croprect->right;
 			croprect->right = width - cropleft;
 		}
-		hr = wicFactory->CreateBitmapFromSourceRect(bitmap, croprect->left, croprect->top, croprect->right - croprect->left, croprect->bottom - croprect->top, &wicCroppedBitmap);
+		hr = wicFactory->CreateBitmapFromSourceRect(bitmap.Get(), croprect->left, croprect->top, croprect->right - croprect->left, croprect->bottom - croprect->top, &wicCroppedBitmap);
 		bitmap = wicCroppedBitmap;
 	}
 
-	hr = wicConverter->Initialize(bitmap, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom);
+	hr = wicConverter->Initialize(bitmap.Get(), GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom);
 	gfx->renderTarget->CreateBitmapFromWicBitmap(wicConverter, NULL, &bmp);
 
-	if (wicDecoder) wicDecoder->Release();
-	if (wicConverter) wicConverter->Release();
+	wicDecoder->Release();
+	wicConverter->Release();
 }
 
 
@@ -115,18 +114,18 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 	UINT width = 0, height = 0;
 	bitmap->GetSize(&width, &height);
 
-	IWICBitmapSource* pOriginalBitmapSource = nullptr;
+	ComPtr<IWICBitmapSource> pOriginalBitmapSource;
 	bitmap->QueryInterface(IID_PPV_ARGS(&pOriginalBitmapSource));
 
-	IWICBitmap* bitmap_copy;
-	wicFactory->CreateBitmapFromSource(pOriginalBitmapSource, WICBitmapCacheOnDemand, &bitmap_copy);
+	ComPtr<IWICBitmap> bitmap_copy = bitmap;
+	wicFactory->CreateBitmapFromSource(pOriginalBitmapSource.Get(), WICBitmapCacheOnDemand, &bitmap_copy);
 
-	IWICBitmapLock* pLock = nullptr;
+	ComPtr<IWICBitmapLock> pLock;
 	WICRect rcLock = { 0, 0, width, height };
 	bitmap_copy->Lock(&rcLock, WICBitmapLockWrite, &pLock);
 
 	UINT bufferSize = 0;
-	BYTE* pPixels = nullptr;
+	BYTE* pPixels;
 	pLock->GetDataPointer(&bufferSize, &pPixels);
 
 	int bytesPerPixel = 4;  // 32 bits per pixel, 8 bits per channel
@@ -193,6 +192,8 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 					pPixels[offset + 1] = static_cast<BYTE>(min(round((255 - (255 - pPixels[offset + 1] * (brightness * (1 / minBrightness))) * brightness_g) * (255 * 32)) / (255 * 32) * imageBrightness * brightnessmultiplier, 255.0f));  // Green component
 					pPixels[offset + 2] = static_cast<BYTE>(min(round((255 - (255 - pPixels[offset + 2] * (brightness * (1 / minBrightness))) * brightness_r) * (255 * 32)) / (255 * 32) * imageBrightness * brightnessmultiplier, 255.0f));  // Red component
 				}
+				
+				lightsWithinRange.clear();
 			}
 
 			pPixels[offset + 3] = static_cast<BYTE>(pPixels[offset + 3] * opacity);  // Alpha component
@@ -202,21 +203,23 @@ void SpriteSheet::reShadeBitmap(int spriteX, int spriteY) {
 		}
 	}
 
-	pLock->Release();
+	pLock.Reset();
 
-	IWICFormatConverter* wicConverter = NULL;
 	wicFactory->CreateFormatConverter(&wicConverter);
-	wicConverter->Initialize(bitmap_copy, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom);
+	wicConverter->Initialize(bitmap_copy.Get(), GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom);
 
+	bmp->Release();
 	gfx->renderTarget->CreateBitmapFromWicBitmap(wicConverter, NULL, &bmp);
-	bitmap_copy->Release();
 	wicConverter->Release();
+	bitmap_copy.Reset();
 }
 
 void SpriteSheet::setOpacity(float opacity) {
 	opacity = min(max(opacity, 0.0f), 1.0f);
-	this->opacity = opacity;
-	shaded = false;
+	if (this->opacity != opacity) {
+		this->opacity = opacity;
+		shaded = false;
+	}
 }
 
 void SpriteSheet::Draw(double x, double y) {

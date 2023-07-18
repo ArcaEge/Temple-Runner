@@ -30,11 +30,13 @@ class Player : public Sprite {
 	int animationRunningFrame = 0;
 	int animationJumpingFrame = 0;
 	int animationFallingFrame = 0;
+	int animationAttackFrame = -1;
 
 	const int ANIMATION_IDLE_MAX = 3;
 	const int ANIMATION_RUNNING_MAX = 5;
 	const int ANIMATION_JUMPING_MAX = 3;
 	const int ANIMATION_FALLING_MAX = 1;
+	const int ANIMATION_ATTACK_MAX = 3;
 
 	const int MAX_FRAME_TIMER = 7;
 	int frameTimer = MAX_FRAME_TIMER;
@@ -50,13 +52,11 @@ class Player : public Sprite {
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 100,0,150,38 }), true, 1.2f, false)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 150,0,200,38 }), true, 1.2f, false)),
 	};
-	SpriteSheet idleFlipped[6] = {
+	SpriteSheet idleFlipped[4] = {
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 0,  0,50, 38 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 50, 0,100,38 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 100,0,150,38 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 150,0,200,38 }), true, 1.2f, true)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,0,250,38 }), true, 1.2f, true)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 250,0,300,38 }), true, 1.2f, true)),
 	};
 
 	SpriteSheet running[6]{
@@ -92,20 +92,26 @@ class Player : public Sprite {
 	};
 
 	SpriteSheet falling[2]{
-		/**(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 200,75,250,112 }), true, 1.2f, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 250,75,300,112 }), true, 1.2f, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 300,75,350,112 }), true, 1.2f, false)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 1,111,50,148 }), true, 1.2f, false)),*/
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 50, 111,100,148 }), true, 1.2f, false)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 100,111,150,148 }), true, 1.2f, false)),
 	};
 	SpriteSheet fallingFlipped[2]{
-		/**(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,75,250,112 }), true, 1.2f, true)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 250,75,300,112 }), true, 1.2f, true)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 300,75,350,112 }), true, 1.2f, true)),
-		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 1,111,50,148 }), true, 1.2f, true)),*/
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 50, 111,100,148 }), true, 1.2f, true)),
 		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 100,111,150,148 }), true, 1.2f, true)),
+	};
+
+	SpriteSheet swordAttack[4]{
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 100,222,150,259 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 150,222,200,259 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 200,222,250,259 }), true, 1.2f, false)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet.png", global_gfx, new RECT({ 250,222,300,259 }), true, 1.2f, false)),
+	};
+	SpriteSheet swordAttackFlipped[4]{
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 100,222,150,259 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 150,222,200,259 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 200,222,250,259 }), true, 1.2f, true)),
+		*(new SpriteSheet((wchar_t*)L"tilesets\\adventurer-v1.5-Sheet_Flipped.png", global_gfx, new RECT({ 250,222,300,259 }), true, 1.2f, true)),
+		
 	};
 
 public:
@@ -148,6 +154,14 @@ public:
 					fallingspeed = -JUMP_SPEED;
 			}
 		}
+		if (KeyboardManager::isPressed(0) && animationAttackFrame == -1) {
+			animationAttackFrame = 0;
+			if (imageFlipped) {
+				moveXWithCollision(-2);
+			} else {
+				moveXWithCollision(2);
+			}
+		}
 		if (KeyboardManager::isPressed(1) && !(KeyboardManager::isPressed(3)) && x > 0) {
 			animationActive = 1;
 			imageFlipped = true;
@@ -173,9 +187,13 @@ public:
 			if (animationRunningFrame > ANIMATION_RUNNING_MAX) animationRunningFrame = 0;
 			if (animationJumpingFrame > ANIMATION_JUMPING_MAX) animationJumpingFrame = 2;
 			if (animationFallingFrame > ANIMATION_FALLING_MAX) animationFallingFrame = 0;
+			if (animationAttackFrame > ANIMATION_ATTACK_MAX) animationAttackFrame = -1;
 
 			if (imageFlipped) {
-				if (fallingspeed < 0) {
+				if (animationAttackFrame != -1) {
+					sheet = &swordAttackFlipped[animationAttackFrame];
+				}
+				else if (fallingspeed < 0) {
 					sheet = &jumpingFlipped[animationJumpingFrame];
 					animationRunningFrame = 0;
 					animationFallingFrame = 0;
@@ -201,7 +219,10 @@ public:
 				}
 			}
 			else {
-				if (fallingspeed < 0) {
+				if (animationAttackFrame != -1) {
+					sheet = &swordAttack[animationAttackFrame];
+				}
+				else if (fallingspeed < 0) {
 					sheet = &jumping[animationJumpingFrame];
 					animationRunningFrame = 0;
 					animationFallingFrame = 0;
@@ -231,6 +252,9 @@ public:
 			animationRunningFrame++;
 			animationJumpingFrame++;
 			animationFallingFrame++;
+			if (animationAttackFrame != -1) {
+				animationAttackFrame++;
+			}
 		}
 
 		if (isInvincible) {

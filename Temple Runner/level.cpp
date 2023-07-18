@@ -1,4 +1,5 @@
 #include "level.h"
+#include "globals.h"
 
 #include <string.h>
 
@@ -7,12 +8,11 @@ using json = nlohmann::json;
 extern HWND windowhandle;
 
 Graphics* global_gfx = nullptr;
-Level* global_level = nullptr;
 
 Level::Level(char* levelname, Graphics* graphics) {
 	gfx = graphics;
 	global_gfx = gfx;
-	global_level = this;
+
 	SpriteSheet::scrolled = 0;
 
 	RECT windowSize;

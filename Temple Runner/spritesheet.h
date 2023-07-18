@@ -2,14 +2,19 @@
 
 #include <vector>
 #include <wincodec.h>
+#include <memory>
+#include <wrl/client.h>
 #include "graphics.h"
 #include "light.h"
+
+using Microsoft::WRL::ComPtr;
 
 class SpriteSheet {
 	Graphics* gfx;
 	ID2D1Bitmap* bmp;
-	IWICBitmap* bitmap;
+	ComPtr<IWICBitmap> bitmap;
 	IWICImagingFactory* wicFactory;
+	IWICFormatConverter* wicConverter;
 
 	bool shaded = false;
 	bool flipped = false;

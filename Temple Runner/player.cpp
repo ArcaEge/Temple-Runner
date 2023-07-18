@@ -48,7 +48,7 @@ void Player::gravity() {
 bool Player::isTouchingBlockVertically(bool spikeDamage) {
 	bool isTouching = false;
 	bool divideByTwo = false;
-	Block* blockLeft = getBlockAt(x + 1, y + 29);
+	Block* blockLeft = getBlockAt(x + 3, y + 29);
 	Block* blockRight = getBlockAt(x + 15, y + 29);
 	if ((blockLeft != nullptr && (blockLeft->type != 't')) || (blockRight != nullptr && (blockRight->type != 't'))) {
 
@@ -81,7 +81,7 @@ bool Player::isTouchingBlockVertically(bool spikeDamage) {
 
 bool Player::isTouchingBlockTop() {
 	bool isTouching = false;
-	Block* blockLeft = getBlockAt(x + 1, y, 'x');
+	Block* blockLeft = getBlockAt(x + 3, y, 'x');
 	Block* blockRight = getBlockAt(x + 15, y, 'x');
 	if (blockLeft != nullptr || blockRight != nullptr) {
 		isTouching = true;
